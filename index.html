@@ -3,76 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Infinity System v2</title>
+    <title>Just Alya - V9 Original</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --neon-blue: #00f3ff; --neon-purple: #9d00ff; }
-        body { 
-            background: #020205; color: white; font-family: 'Rajdhani', sans-serif;
-            background-image: radial-gradient(circle at 50% 0%, #111827 0%, #020205 100%);
-            min-height: 100vh; margin: 0; padding-bottom: 100px;
-        }
+        body { background: #050505; color: white; font-family: 'Rajdhani', sans-serif; min-height: 100vh; padding-bottom: 100px; margin: 0; }
         .font-cyber { font-family: 'Orbitron', sans-serif; }
-        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
-        .char-overlay { position: fixed; width: 300px; opacity: 0.15; z-index: -1; pointer-events: none; }
-        .anime-card { background: linear-gradient(145deg, rgba(20,20,30,0.9), rgba(5,5,10,0.95)); border-radius: 24px; border: 1px solid rgba(0,243,255,0.1); transition: 0.3s; }
-        .btn-neon { background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); color: black; font-weight: 900; }
-        .tab-active { border-bottom: 3px solid var(--neon-blue); color: var(--neon-blue); }
-        .mobile-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(10,10,15,0.95); display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid var(--neon-blue); z-index: 100; backdrop-filter: blur(10px); }
+        .glass { background: rgba(20, 20, 30, 0.9); border: 1px solid rgba(255,255,255,0.1); }
+        .tab-content { display: none; }
+        .active-tab { display: block; }
+        .nav-active { color: #00f3ff; filter: drop-shadow(0 0 5px #00f3ff); opacity: 1 !important; }
+        
+        #toast { 
+            visibility: hidden; min-width: 200px; background: #111; color: #00f3ff; 
+            text-align: center; border-radius: 8px; padding: 12px; position: fixed; 
+            z-index: 9999; left: 50%; bottom: 90px; transform: translateX(-50%); 
+            border: 1px solid #00f3ff; font-weight: bold; font-size: 11px; text-transform: uppercase;
+        }
+        #toast.show { visibility: visible; animation: fadein 0.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 90px; opacity: 1;} }
     </style>
 </head>
 <body>
 
-    <img src="https://images.squarespace-cdn.com/content/v1/5fe4caeadae61a2f1948a3d4/1612403164917-S87N688D2VUXB9K6W7G6/Satoru_Gojo_render.png" class="char-overlay" style="top:0; left:-50px;">
-    
-    <div class="p-4 max-w-xl mx-auto">
-        <header class="flex justify-between items-center mb-6 pt-4">
-            <div>
-                <h1 class="font-cyber text-xl text-cyan-400 tracking-tighter italic">INFINITY SYSTEM</h1>
-                <p id="totalCount" class="text-[10px] font-bold text-purple-400 uppercase tracking-widest">Initialising Cloud...</p>
-            </div>
-            <div class="w-10 h-10 glass rounded-full flex items-center justify-center border-cyan-500/50">⚡</div>
-        </header>
+    <div id="toast">SYSTEM ONLINE</div>
 
-        <div id="importSection" class="glass p-5 rounded-[2rem] mb-8 border-l-4 border-cyan-500">
-            <h2 class="text-[10px] font-cyber text-cyan-400 mb-3 uppercase tracking-widest">Manual Link / Mass Sync</h2>
-            <input id="searchInput" type="text" placeholder="Search or paste names..." class="w-full bg-black/50 border border-white/10 p-4 rounded-2xl text-white text-sm focus:border-cyan-400 outline-none mb-3">
+    <div id="home-tab" class="tab-content active-tab p-4 max-w-xl mx-auto">
+        <h1 class="font-cyber text-cyan-400 text-xl mb-4 italic tracking-widest">MY CORES</h1>
+        <input id="homeSearch" type="text" placeholder="Search saved..." class="w-full glass p-3 rounded-xl mb-4 outline-none border-cyan-500/20" onkeyup="filterHome()">
+        <div id="myAnimeList" class="space-y-3"></div>
+    </div>
+
+    <div id="discovery-tab" class="tab-content p-4 max-w-xl mx-auto">
+        <h1 class="font-cyber text-purple-400 text-xl mb-4">DISCOVERY</h1>
+        <div class="glass p-4 rounded-xl mb-6 border-purple-500/30">
             <div class="flex gap-2">
-                <button onclick="manualSearch()" class="flex-1 btn-neon py-3 rounded-xl text-xs uppercase tracking-tighter">Search One</button>
-                <button onclick="massSync()" class="flex-1 bg-white/5 border border-white/10 py-3 rounded-xl text-xs uppercase text-white">Mass Sync</button>
+                <input id="manualSearchInput" type="text" placeholder="Search any anime..." class="flex-1 bg-black/50 p-3 rounded text-sm outline-none border border-white/10">
+                <button onclick="performSearch()" class="bg-purple-600 px-4 rounded font-bold text-xs">SCAN</button>
             </div>
         </div>
-
-        <h2 class="font-cyber text-xs text-white mb-4 flex items-center gap-2">
-            <span class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span> MY CLOUD LIST
-        </h2>
-        <div id="myAnimeList" class="space-y-4 mb-10"></div>
-
-        <div class="mt-12">
-            <div class="flex gap-6 mb-6 border-b border-white/10">
-                <button onclick="loadDiscovery('now')" id="tab-now" class="pb-2 text-xs font-cyber tab-active uppercase">Winter 2026</button>
-                <button onclick="loadDiscovery('upcoming')" id="tab-upcoming" class="pb-2 text-xs font-cyber text-gray-500 uppercase">Upcoming</button>
-            </div>
-            <div id="discoveryGrid" class="grid grid-cols-2 gap-4"></div>
-        </div>
+        <div id="discoveryGrid" class="grid grid-cols-2 gap-4"></div>
     </div>
 
-    <div class="mobile-nav">
-        <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="flex flex-col items-center">
-            <span class="text-xl">🏠</span><span class="text-[8px] font-bold mt-1">DASHBOARD</span>
+    <div class="fixed bottom-0 left-0 right-0 glass flex justify-around p-4 z-50 backdrop-blur-md">
+        <button onclick="switchTab('home')" id="home-nav" class="nav-active flex flex-col items-center opacity-40">
+            <span class="text-xl">🏠</span><span class="text-[10px] font-bold mt-1">HOME</span>
         </button>
-        <button onclick="document.getElementById('importSection').scrollIntoView({behavior:'smooth'})" class="flex flex-col items-center">
-            <span class="text-xl">🛰️</span><span class="text-[8px] font-bold mt-1">SYNC</span>
+        <button onclick="switchTab('discovery')" id="discovery-nav" class="flex flex-col items-center opacity-40">
+            <span class="text-xl">🛰️</span><span class="text-[10px] font-bold mt-1">SCAN</span>
         </button>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, updateDoc, doc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
+    <script>
+        // CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyDYvHIugakxPULLyI85Iu_0M3_U9tW8wU",
             authDomain: "animetracker-gojo.firebaseapp.com",
@@ -82,98 +68,101 @@
             appId: "1:412459430656:web:2560368142cc5d109f2575"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const animeCol = collection(db, "myAnime");
-        let trackedIds = new Set();
+        // INITIALIZE
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const animeCol = db.collection("myAnime");
 
-        // SEASONAL DISCOVERY
-        window.loadDiscovery = async (type) => {
-            document.getElementById('tab-now').className = type === 'now' ? 'pb-2 text-xs font-cyber tab-active uppercase' : 'pb-2 text-xs font-cyber text-gray-500 uppercase';
-            document.getElementById('tab-upcoming').className = type === 'upcoming' ? 'pb-2 text-xs font-cyber tab-active uppercase' : 'pb-2 text-xs font-cyber text-gray-500 uppercase';
+        // NOTIFICATIONS
+        function showNotify(msg) {
+            const x = document.getElementById("toast");
+            x.innerText = msg;
+            x.classList.add("show");
+            setTimeout(() => { x.classList.remove("show"); }, 3000);
+        }
+
+        // TABS
+        function switchTab(t) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active-tab'));
+            document.querySelectorAll('button[id$="-nav"]').forEach(el => el.classList.remove('nav-active'));
+            document.getElementById(t + '-tab').classList.add('active-tab');
+            document.getElementById(t + '-nav').classList.add('nav-active');
+        }
+
+        // DISCOVERY SEARCH
+        async function performSearch() {
+            const q = document.getElementById('manualSearchInput').value;
+            if(!q) return;
+            const grid = document.getElementById('discoveryGrid');
+            grid.innerHTML = '<div class="col-span-2 text-center text-xs py-10 animate-pulse">CONNECTING...</div>';
             
             try {
-                const url = type === 'now' ? 'https://api.jikan.moe/v4/seasons/now' : 'https://api.jikan.moe/v4/seasons/upcoming';
-                const res = await fetch(url);
+                const res = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(q)}&limit=12`);
                 const json = await res.json();
-                const grid = document.getElementById('discoveryGrid');
                 grid.innerHTML = '';
-                json.data.slice(0, 12).forEach(a => {
-                    if (trackedIds.has(a.mal_id)) return;
-                    const div = document.createElement('div');
-                    div.className = 'glass rounded-3xl overflow-hidden relative h-52 border-b-4 border-cyan-500';
-                    div.onclick = () => addAnime(a);
-                    div.innerHTML = `
-                        <img src="${a.images.jpg.large_image_url}" class="w-full h-full object-cover">
-                        <div class="absolute bottom-0 left-0 right-0 p-3 bg-black/80 backdrop-blur-sm">
-                            <p class="text-[10px] font-bold truncate text-white uppercase">${a.title}</p>
-                            <p class="text-[8px] text-cyan-400 font-black tracking-widest">+ LINK DATA</p>
+                json.data.forEach(a => {
+                    const title = a.title_english || a.title;
+                    const card = document.createElement('div');
+                    card.className = 'glass rounded-xl overflow-hidden relative h-48';
+                    card.innerHTML = `
+                        <img src="${a.images.jpg.large_image_url}" class="w-full h-full object-cover opacity-80">
+                        <div class="absolute bottom-0 w-full p-2 bg-black/90">
+                            <p class="text-[9px] font-bold truncate">${title}</p>
+                            <button onclick="addAnime('${title.replace(/'/g, "\\'")}', '${a.images.jpg.large_image_url}')" class="text-[8px] text-cyan-400 font-bold uppercase">+ Track Core</button>
                         </div>`;
-                    grid.appendChild(div);
+                    grid.appendChild(card);
                 });
-            } catch(e) {}
-        };
+            } catch(e) { showNotify("Search Offline"); }
+        }
 
-        // SEARCH & SYNC
-        window.manualSearch = async () => {
-            const query = document.getElementById('searchInput').value;
-            if(!query) return;
-            const res = await fetch(`https://api.jikan.moe/v4/anime?q=${query}&limit=1`);
-            const json = await res.json();
-            if(json.data?.[0]) addAnime(json.data[0]);
-            document.getElementById('searchInput').value = '';
-        };
+        function addAnime(title, img) {
+            animeCol.add({ title, image: img, ep: 1, updated: Date.now() })
+                .then(() => showNotify("CORE LOCKED: " + title));
+        }
 
-        window.massSync = async () => {
-            const val = document.getElementById('searchInput').value;
-            const names = val.split(/[,\n]/).map(n => n.trim()).filter(n => n);
-            for(let name of names) {
-                const res = await fetch(`https://api.jikan.moe/v4/anime?q=${name}&limit=1`);
-                const json = await res.json();
-                if(json.data?.[0]) await addAnime(json.data[0]);
-                await new Promise(r => setTimeout(r, 1000));
-            }
-            document.getElementById('searchInput').value = '';
-        };
-
-        window.addAnime = async (a) => {
-            await addDoc(animeCol, {
-                title: a.title_english || a.title,
-                image: a.images.jpg.large_image_url,
-                ep: 1, mal_id: a.mal_id, updated: Date.now()
-            });
-        };
-
-        // CLOUD SYNC LIST
-        onSnapshot(query(animeCol, orderBy("updated", "desc")), (snap) => {
+        // HOME LIST SYNC
+        animeCol.orderBy("updated", "desc").onSnapshot((snap) => {
             const list = document.getElementById('myAnimeList');
-            list.innerHTML = ''; trackedIds.clear();
-            let count = 0;
-            snap.forEach(d => {
-                const a = d.data(); count++;
-                if(a.mal_id) trackedIds.add(a.mal_id);
-                const card = document.createElement('div');
-                card.className = 'anime-card p-4 flex gap-5 items-center relative overflow-hidden';
-                card.innerHTML = `
-                    <div class="absolute top-0 right-0 w-24 h-full bg-cyan-500/5 -skew-x-12 transform translate-x-10"></div>
-                    <img src="${a.image}" class="w-16 h-24 object-cover rounded-2xl shadow-[0_0_15px_rgba(0,0,0,0.5)] z-10">
-                    <div class="flex-1 min-w-0 z-10">
-                        <h3 class="text-xs font-cyber text-white truncate pr-6 uppercase italic">${a.title}</h3>
-                        <div class="flex items-center gap-5 mt-4">
-                            <button onclick="up('${d.id}',${a.ep},-1)" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-xl">-</button>
-                            <span class="text-2xl font-cyber text-cyan-400">${a.ep}</span>
-                            <button onclick="up('${d.id}',${a.ep},1)" class="w-10 h-10 rounded-xl btn-neon flex items-center justify-center text-xl shadow-[0_0_10px_rgba(0,243,255,0.4)]">+</button>
+            list.innerHTML = '';
+            snap.forEach(doc => {
+                const a = doc.data();
+                const id = doc.id;
+                const div = document.createElement('div');
+                div.className = 'glass p-3 rounded-xl flex gap-3 items-center relative border border-white/5';
+                div.innerHTML = `
+                    <img src="${a.image}" class="w-12 h-16 rounded object-cover">
+                    <div class="flex-1">
+                        <h3 class="text-[10px] font-bold uppercase truncate w-32 text-cyan-50">${a.title}</h3>
+                        <div class="flex items-center gap-4 mt-2">
+                            <button onclick="up('${id}',${a.ep},-1)" class="w-7 h-7 glass rounded">-</button>
+                            <span class="text-xs font-cyber">${a.ep}</span>
+                            <button onclick="up('${id}',${a.ep},1)" class="w-7 h-7 bg-cyan-500 text-black font-bold rounded shadow-lg shadow-cyan-500/20">+</button>
                         </div>
                     </div>
-                    <button onclick="del('${d.id}')" class="absolute top-2 right-3 text-white/20 text-lg">×</button>`;
-                list.appendChild(card);
+                    <button onclick="del('${id}')" class="absolute top-2 right-2 text-gray-700">✕</button>`;
+                list.appendChild(div);
             });
-            document.getElementById('totalCount').innerText = `${count} DATA CORES LINKED`;
-            loadDiscovery('now');
         });
 
-        window.up = (id, c, ch) => updateDoc(doc(db, 'myAnime', id), { ep: c+ch, updated: Date.now() });
-        window.del = (id) => deleteDoc(doc(db, 'myAnime', id));
+        function up(id, c, ch) {
+            if(c+ch < 0) return;
+            animeCol.doc(id).update({ ep: c+ch, updated: Date.now() })
+                .then(() => showNotify("EPISODE SYNCED"));
+        }
+
+        function del(id) {
+            if(confirm('Purge this core?')) {
+                animeCol.doc(id).delete();
+            }
+        }
+        
+        function filterHome() {
+            const q = document.getElementById('homeSearch').value.toLowerCase();
+            document.querySelectorAll('#myAnimeList > div').forEach(el => {
+                const text = el.querySelector('h3').innerText.toLowerCase();
+                el.style.display = text.includes(q) ? 'flex' : 'none';
+            });
+        }
     </script>
 </body>
 </html>
