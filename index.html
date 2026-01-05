@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gojo Infinity v9.2: 2026 Future</title>
+    <title>Gojo Infinity v9.3: Fix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
@@ -11,18 +11,20 @@
         body { 
             background: var(--bg); color: white; font-family: 'Rajdhani', sans-serif;
             background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #020205 100%);
-            min-height: 100vh; overflow-x: hidden;
+            min-height: 100vh; overflow-x: hidden; margin: 0;
         }
         .font-cyber { font-family: 'Orbitron', sans-serif; }
         .glass { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
         .card { transition: 0.3s; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); background: black; overflow: hidden; }
         .card:hover { transform: translateY(-5px); border-color: var(--neon-blue); box-shadow: 0 0 20px rgba(0, 243, 255, 0.2); }
         
-        /* Removed Alya image from bottom left as requested */
         .char-gojo { position: fixed; top: 0; right: -50px; width: 350px; opacity: 0.2; z-index: -1; pointer-events: none; }
-        .progress-bar { height: 4px; background: linear-gradient(90deg, #00f3ff, #9d00ff); width: 0%; transition: width 0.3s; }
         
-        #toast { visibility: hidden; min-width: 200px; background: #111; color: #00f3ff; text-align: center; border-radius: 8px; padding: 12px; position: fixed; z-index: 9999; left: 50%; bottom: 30px; transform: translateX(-50%); border: 1px solid #00f3ff; font-weight: bold; font-size: 11px; }
+        #toast { 
+            visibility: hidden; min-width: 200px; background: #111; color: #00f3ff; text-align: center; border-radius: 8px; 
+            padding: 12px; position: fixed; z-index: 9999; left: 50%; bottom: 30px; transform: translateX(-50%); 
+            border: 1px solid #00f3ff; font-weight: bold; font-size: 11px; 
+        }
         #toast.show { visibility: visible; animation: fadein 0.5s; }
         @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
     </style>
@@ -30,40 +32,24 @@
 <body class="p-4 md:p-10 pb-40">
 
     <div id="toast">SYSTEM NOTIFICATION</div>
-
     <img src="https://images.squarespace-cdn.com/content/v1/5fe4caeadae61a2f1948a3d4/1612403164917-S87N688D2VUXB9K6W7G6/Satoru_Gojo_render.png" class="char-gojo">
 
     <div class="max-w-7xl mx-auto relative z-10">
-        
         <header class="flex flex-col md:flex-row justify-between items-center mb-10 glass p-6 rounded-3xl border border-cyan-500/20">
             <div>
-                <h1 class="font-cyber text-3xl bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">INFINITY v9.2</h1>
-                <p class="text-[10px] text-cyan-500 font-bold tracking-[0.4em] uppercase mt-1">2026 Future Scan</p>
+                <h1 class="font-cyber text-3xl bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">INFINITY v9.3</h1>
+                <p class="text-[10px] text-cyan-500 font-bold tracking-[0.4em] uppercase mt-1">Status: Online & Ready</p>
             </div>
-            <button onclick="enableNotif()" class="mt-4 md:mt-0 px-6 py-2 bg-cyan-500/10 border border-cyan-500 text-cyan-400 font-bold rounded-full hover:bg-cyan-500 transition">🔔 ALERTS</button>
+            <button onclick="enableNotif()" class="mt-4 md:mt-0 px-6 py-2 bg-cyan-500/10 border border-cyan-500 text-cyan-400 font-bold rounded-full">🔔 ALERTS</button>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
             <div class="lg:col-span-4 space-y-6">
-                <div class="glass p-6 rounded-3xl border-l-4 border-purple-500">
-                    <h2 class="text-sm font-cyber mb-4 text-purple-400 uppercase tracking-widest">⚡ Bulk Linker</h2>
-                    <textarea id="bulkInput" placeholder="Paste anime names here..." 
-                              class="w-full bg-black/50 border border-white/10 p-4 rounded-xl h-40 text-xs outline-none focus:border-purple-500"></textarea>
-                    
-                    <div id="bulkStatus" class="hidden mt-3">
-                        <div class="w-full bg-white/5 h-1 rounded-full mb-1"><div id="bulkProgress" class="progress-bar"></div></div>
-                        <p id="bulkText" class="text-[9px] text-purple-300 uppercase font-bold text-center">Processing...</p>
-                    </div>
-                    
-                    <button onclick="massAdd()" id="bulkBtn" class="w-full mt-3 bg-purple-600 hover:bg-purple-500 py-3 rounded-xl font-bold text-xs uppercase transition">Sync Whole List</button>
-                </div>
-
                 <div class="glass p-6 rounded-3xl border border-white/10">
-                    <h3 class="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-4">Search Future Anime</h3>
+                    <h3 class="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-4">Search 2026 Anime</h3>
                     <div class="flex gap-2 mb-4">
-                        <input type="text" id="dbSearch" placeholder="Search (e.g. JJK)..." class="flex-1 bg-black/40 border border-white/10 p-3 rounded-xl text-xs outline-none focus:border-cyan-500">
-                        <button onclick="manualSearch()" class="bg-cyan-600 px-4 rounded-xl font-bold text-[10px]">FIND</button>
+                        <input type="text" id="dbSearch" placeholder="Type name..." class="flex-1 bg-black/40 border border-white/10 p-3 rounded-xl text-xs outline-none focus:border-cyan-500">
+                        <button id="searchBtn" class="bg-cyan-600 px-4 rounded-xl font-bold text-[10px]">FIND</button>
                     </div>
                     <div id="searchResults" class="space-y-2 max-h-60 overflow-y-auto"></div>
                 </div>
@@ -72,19 +58,13 @@
             <div class="lg:col-span-8 space-y-12">
                 <section>
                     <h2 class="text-2xl font-bold font-cyber mb-6 flex items-center gap-3">
-                        <span class="w-2 h-8 bg-cyan-500 rounded-full"></span> MY WATCHLIST
+                        <span class="w-2 h-8 bg-cyan-500 rounded-full"></span> SAVED CORES
                     </h2>
                     <div id="myAnimeList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                 </section>
 
                 <section class="glass p-6 rounded-3xl border border-white/5">
-                    <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                        <h2 class="text-xl font-bold font-cyber text-purple-400 uppercase">2026 Season Scan</h2>
-                        <div class="flex gap-2">
-                            <button onclick="loadSeason('2026/winter')" class="px-4 py-2 bg-white/5 hover:bg-cyan-500/20 border border-white/10 rounded-lg text-[10px] font-bold">WINTER 2026</button>
-                            <button onclick="loadSeason('upcoming')" class="px-4 py-2 bg-white/5 hover:bg-purple-500/20 border border-white/10 rounded-lg text-[10px] font-bold">UPCOMING</button>
-                        </div>
-                    </div>
+                    <h2 class="text-xl font-bold font-cyber text-purple-400 uppercase mb-6">Discovery Hub</h2>
                     <div id="discoveryGrid" class="grid grid-cols-2 md:grid-cols-3 gap-4"></div>
                 </section>
             </div>
@@ -109,66 +89,53 @@
         const db = getFirestore(app);
         const animeCol = collection(db, "myAnime");
 
-        const CURRENT_YEAR = 2026;
-
         function showNotify(msg) {
             const x = document.getElementById("toast");
             x.innerText = msg;
             x.classList.add("show");
-            setTimeout(() => { x.classList.remove("show"); }, 3000);
+            setTimeout(() => x.classList.remove("show"), 3000);
         }
 
-        // --- ADDING FUNCTION (FIXED) ---
-        window.addOne = async (a) => {
+        // --- THE FIX: GLOBAL ADD FUNCTION ---
+        window.addOne = async (title, image, mal_id, relDate) => {
             try {
-                const title = a.title_english || a.title;
-                const img = a.images.jpg.large_image_url;
-                const rel = a.aired && a.aired.string ? a.aired.string.split(' to')[0] : 'TBA';
-                
-                await addDoc(animeCol, { 
-                    title: title, 
-                    image: img, 
-                    ep: 1, 
-                    relDate: rel, 
-                    mal_id: a.mal_id, 
-                    updated: Date.now() 
+                await addDoc(animeCol, {
+                    title, image, mal_id, relDate,
+                    ep: 1,
+                    updated: Date.now()
                 });
                 showNotify("CORE LOCKED: " + title);
             } catch (e) {
-                console.error(e);
-                showNotify("SYNC ERROR");
+                showNotify("ERROR ADDING");
             }
         };
 
-        // --- SEARCH (FIXED) ---
-        window.manualSearch = async () => {
+        // --- MANUAL SEARCH ---
+        document.getElementById('searchBtn').onclick = async () => {
             const q = document.getElementById('dbSearch').value;
-            if(!q) return;
-            const resultsDiv = document.getElementById('searchResults');
-            resultsDiv.innerHTML = '<p class="text-[10px] animate-pulse">FILTERING FUTURE...</p>';
+            const resDiv = document.getElementById('searchResults');
+            resDiv.innerHTML = '<p class="text-[10px] animate-pulse">SCANNING...</p>';
             
-            try {
-                const res = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(q)}&order_by=start_date&sort=desc`);
-                const json = await res.json();
-                resultsDiv.innerHTML = '';
-                
-                json.data.forEach(a => {
-                    const year = a.year || (a.aired && a.aired.prop.from.year);
-                    if (year && year < CURRENT_YEAR) return; // Hide old seasons
+            const res = await fetch(`https://api.jikan.moe/v4/anime?q=${q}&order_by=start_date&sort=desc`);
+            const json = await res.json();
+            resDiv.innerHTML = '';
+            
+            json.data.forEach(a => {
+                const year = a.year || (a.aired?.prop?.from?.year);
+                if (year && year < 2026) return;
 
-                    const title = a.title_english || a.title;
-                    const div = document.createElement('div');
-                    div.className = 'glass p-2 rounded-lg flex items-center gap-2 cursor-pointer hover:bg-white/10 mb-2';
-                    div.innerHTML = `
+                const title = (a.title_english || a.title).replace(/'/g, "");
+                const div = document.createElement('div');
+                div.className = 'glass p-2 rounded-lg flex items-center justify-between mb-2';
+                div.innerHTML = `
+                    <div class="flex items-center gap-2 overflow-hidden">
                         <img src="${a.images.jpg.small_image_url}" class="w-8 h-10 rounded">
-                        <div class="overflow-hidden">
-                            <p class="text-[9px] font-bold truncate">${title}</p>
-                            <p class="text-[7px] text-cyan-400 uppercase">ADD TO LIST</p>
-                        </div>`;
-                    div.onclick = () => window.addOne(a);
-                    resultsDiv.appendChild(div);
-                });
-            } catch(e) { showNotify("Search Error"); }
+                        <p class="text-[9px] font-bold truncate">${title}</p>
+                    </div>
+                    <button onclick="window.addOne('${title}', '${a.images.jpg.large_image_url}', ${a.mal_id}, '${a.aired.string.split(' to')[0]}')" class="text-[8px] text-cyan-400 font-bold px-2">ADD</button>
+                `;
+                resDiv.appendChild(div);
+            });
         };
 
         // --- FIREBASE SYNC ---
@@ -180,52 +147,52 @@
                 const div = document.createElement('div');
                 div.className = 'glass p-3 rounded-2xl flex gap-4 border border-white/5 relative';
                 div.innerHTML = `
-                    <img src="${a.image}" class="w-20 h-28 object-cover rounded-xl">
+                    <img src="${a.image}" class="w-20 h-28 object-cover rounded-xl shadow-lg">
                     <div class="flex-1 flex flex-col justify-between py-1">
                         <div>
                             <h3 class="font-bold text-sm text-cyan-100 truncate w-40">${a.title}</h3>
-                            <div class="text-[9px] text-purple-400 font-bold">${a.relDate || 'TBA'}</div>
+                            <p class="text-[9px] text-purple-400 font-bold mt-1 uppercase">${a.relDate || 'TBA'}</p>
                         </div>
                         <div class="flex items-center gap-3">
-                            <button onclick="window.updateEp('${d.id}',${a.ep},-1)" class="w-7 h-7 bg-white/5 rounded-lg">-</button>
+                            <button onclick="window.up('${d.id}',${a.ep},-1)" class="w-7 h-7 bg-white/5 rounded-lg">-</button>
                             <span class="text-lg font-cyber font-bold text-cyan-400">${a.ep}</span>
-                            <button onclick="window.updateEp('${d.id}',${a.ep},1)" class="w-7 h-7 bg-cyan-600 rounded-lg text-black font-bold">+</button>
+                            <button onclick="window.up('${d.id}',${a.ep},1)" class="w-7 h-7 bg-cyan-600 rounded-lg text-black font-bold">+</button>
                         </div>
                     </div>
-                    <button onclick="window.removeAnime('${d.id}')" class="absolute top-2 right-2 text-white/10 hover:text-red-500">✕</button>`;
+                    <button onclick="window.del('${d.id}')" class="absolute top-2 right-2 text-white/20 hover:text-red-500">✕</button>
+                `;
                 list.appendChild(div);
             });
         });
 
-        // --- DISCOVERY GRID ---
-        window.loadSeason = async (path) => {
-            const res = await fetch(`https://api.jikan.moe/v4/seasons/${path}`);
+        // --- DISCOVERY HUB ---
+        async function loadDiscovery() {
+            const res = await fetch('https://api.jikan.moe/v4/seasons/upcoming');
             const json = await res.json();
             const grid = document.getElementById('discoveryGrid');
             grid.innerHTML = '';
             
-            json.data.forEach(a => {
-                const year = a.year || (a.aired && a.aired.prop.from.year);
-                if (year && year < CURRENT_YEAR) return;
-
+            json.data.slice(0, 12).forEach(a => {
+                const title = (a.title_english || a.title).replace(/'/g, "");
                 const div = document.createElement('div');
-                div.className = 'card relative h-52 cursor-pointer group';
+                div.className = 'card relative h-48 cursor-pointer';
                 div.innerHTML = `
                     <img src="${a.images.jpg.large_image_url}" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute bottom-0 w-full bg-black/90 p-2">
-                        <p class="text-[9px] font-bold truncate">${a.title_english || a.title}</p>
-                    </div>`;
-                div.onclick = () => window.addOne(a);
+                    <div class="absolute bottom-0 w-full bg-black/80 p-2 text-[9px]">
+                        <p class="font-bold truncate">${title}</p>
+                        <p class="text-cyan-400 uppercase mt-1">Add to Watchlist</p>
+                    </div>
+                `;
+                div.onclick = () => window.addOne(title, a.images.jpg.large_image_url, a.mal_id, a.aired.string);
                 grid.appendChild(div);
             });
-        };
+        }
 
-        // --- BUTTON HANDLERS ---
-        window.updateEp = (id, c, ch) => { if(c+ch >= 0) updateDoc(doc(db, 'myAnime', id), { ep: c+ch, updated: Date.now() }); };
-        window.removeAnime = (id) => { if(confirm('Delete Core?')) deleteDoc(doc(db, 'myAnime', id)); };
+        window.up = (id, c, ch) => { if(c+ch >= 0) updateDoc(doc(db, 'myAnime', id), { ep: c+ch, updated: Date.now() }); };
+        window.del = (id) => { if(confirm('Remove?')) deleteDoc(doc(db, 'myAnime', id)); };
         window.enableNotif = () => Notification.requestPermission();
-        
-        loadSeason('2026/winter');
+
+        loadDiscovery();
     </script>
 </body>
 </html>
