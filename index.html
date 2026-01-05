@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Just Alya - Fixed Search</title>
+    <title>Alya - New Cores Only</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
@@ -14,49 +14,48 @@
         .tab-content { display: none; }
         .active-tab { display: block; }
         .nav-active { color: #00f3ff; opacity: 1 !important; filter: drop-shadow(0 0 5px #00f3ff); }
-        /* Toast Notification */
-        #toast { visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 100; left: 50%; bottom: 100px; transform: translateX(-50%); border: 1px solid #00f3ff; }
+        
+        #toast { visibility: hidden; min-width: 200px; background: #111; color: #00f3ff; text-align: center; border-radius: 5px; padding: 12px; position: fixed; z-index: 100; left: 50%; bottom: 90px; transform: translateX(-50%); border: 1px solid #00f3ff; font-weight: bold; font-size: 11px; }
         #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 100px; opacity: 1;} }
-        @keyframes fadeout { from {bottom: 100px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+        @keyframes fadein { from {opacity: 0;} to {opacity: 1;} }
+        @keyframes fadeout { from {opacity: 1;} to {opacity: 0;} }
     </style>
 </head>
 <body>
 
-    <div id="toast">Core Updated</div>
+    <div id="toast">CORE UPDATED</div>
 
     <div id="home-tab" class="tab-content active-tab p-4 max-w-xl mx-auto">
-        <h1 class="font-cyber text-cyan-400 text-2xl mb-6 tracking-tighter">ALYA SYSTEM</h1>
-        <input id="homeSearch" type="text" placeholder="Search saved cores..." class="w-full glass p-4 rounded-xl mb-6 outline-none" onkeyup="filterHome()">
-        <div id="myAnimeList" class="space-y-4"></div>
+        <h1 class="font-cyber text-cyan-400 text-xl mb-4 italic">MY COLLECTION</h1>
+        <input id="homeSearch" type="text" placeholder="Search my cores..." class="w-full glass p-3 rounded-xl mb-4 outline-none" onkeyup="filterHome()">
+        <div id="myAnimeList" class="space-y-3"></div>
     </div>
 
     <div id="discovery-tab" class="tab-content p-4 max-w-xl mx-auto">
-        <h1 class="font-cyber text-purple-400 text-2xl mb-4">DISCOVERY</h1>
+        <h1 class="font-cyber text-purple-400 text-xl mb-4">NEW RELEASES</h1>
         
         <div class="glass p-4 rounded-xl mb-6 border-purple-500/30">
             <div class="flex gap-2">
-                <input id="manualSearchInput" type="text" placeholder="Search name (e.g. Jack of all trades)..." class="flex-1 bg-black/50 p-3 rounded text-sm outline-none border border-white/10">
-                <button onclick="performSearch()" class="bg-purple-600 px-4 rounded font-bold text-xs uppercase">Search</button>
+                <input id="manualSearchInput" type="text" placeholder="Search (e.g. JJK)..." class="flex-1 bg-black/50 p-3 rounded text-sm outline-none border border-white/10">
+                <button onclick="performSearch()" class="bg-purple-600 px-4 rounded font-bold text-xs">FIND</button>
             </div>
-            <p class="text-[9px] text-gray-500 mt-2 uppercase">Search for any anime to see results below</p>
+            <p class="text-[9px] text-cyan-400 mt-2 uppercase tracking-widest">Only showing 2026+ content</p>
         </div>
 
         <div class="flex gap-2 mb-6 overflow-x-auto pb-2 no-scrollbar">
             <button id="btn-upcoming" onclick="changeSeason('upcoming')" class="active-season px-5 py-2 glass rounded-full text-[10px] font-bold uppercase whitespace-nowrap">Upcoming</button>
             <button id="btn-winter" onclick="changeSeason('winter')" class="px-5 py-2 glass rounded-full text-[10px] font-bold uppercase whitespace-nowrap">Winter 2026</button>
-            <button id="btn-summer" onclick="changeSeason('summer')" class="px-5 py-2 glass rounded-full text-[10px] font-bold uppercase whitespace-nowrap">Summer 2026</button>
         </div>
 
         <div id="discoveryGrid" class="grid grid-cols-2 gap-4"></div>
     </div>
 
     <div class="fixed bottom-0 left-0 right-0 glass flex justify-around p-4 z-50 backdrop-blur-md">
-        <button onclick="switchTab('home')" id="home-nav" class="nav-active flex flex-col items-center opacity-50">
+        <button onclick="switchTab('home')" id="home-nav" class="nav-active flex flex-col items-center opacity-40">
             <span class="text-xl">🏠</span><span class="text-[10px] font-bold mt-1">HOME</span>
         </button>
-        <button onclick="switchTab('discovery')" id="discovery-nav" class="flex flex-col items-center opacity-50">
-            <span class="text-xl">🛰️</span><span class="text-[10px] font-bold mt-1">DISCOVERY</span>
+        <button onclick="switchTab('discovery')" id="discovery-nav" class="flex flex-col items-center opacity-40">
+            <span class="text-xl">🛰️</span><span class="text-[10px] font-bold mt-1">SCAN</span>
         </button>
     </div>
 
@@ -80,7 +79,7 @@
             const x = document.getElementById("toast");
             x.innerText = msg;
             x.className = "show";
-            setTimeout(() => { x.className = x.className.replace("show", ""); }, 3000);
+            setTimeout(() => { x.className = ""; }, 3000);
         }
 
         window.switchTab = (t) => {
@@ -88,7 +87,7 @@
             document.querySelectorAll('button[id$="-nav"]').forEach(el => el.classList.remove('nav-active'));
             document.getElementById(t + '-tab').classList.add('active-tab');
             document.getElementById(t + '-nav').classList.add('nav-active');
-            if(t === 'discovery') loadDiscovery();
+            if(t === 'discovery') loadDiscovery('upcoming');
         };
 
         window.changeSeason = (s) => {
@@ -97,45 +96,53 @@
             loadDiscovery(s);
         };
 
-        // RENDER DISCOVERY GRID
+        // NEW LOGIC: RENDER ONLY IF RELEASE YEAR IS 2026 OR LATER
         function renderGrid(data) {
             const grid = document.getElementById('discoveryGrid');
             grid.innerHTML = '';
+            
+            const currentYear = 2026;
+
             data.forEach(a => {
+                const year = a.year || (a.aired && a.aired.prop.from.year);
+                
+                // FILTER: Only show if year is 2026 or higher OR if it's "Upcoming" (null year)
+                if (year && year < currentYear) return;
+
                 const title = a.title_english || a.title;
                 const card = document.createElement('div');
-                card.className = 'glass rounded-xl overflow-hidden relative h-52 group cursor-pointer';
+                card.className = 'glass rounded-xl overflow-hidden relative h-52 active:scale-95 transition';
                 card.innerHTML = `
                     <img src="${a.images.jpg.large_image_url}" class="w-full h-full object-cover">
-                    <div class="absolute bottom-0 w-full p-2 bg-black/80">
-                        <p class="text-[10px] font-bold truncate">${title}</p>
-                        <button onclick="addAnime('${title}', '${a.images.jpg.large_image_url}')" class="text-[9px] text-green-400 font-bold uppercase mt-1">+ Add to List</button>
+                    <div class="absolute bottom-0 w-full p-2 bg-black/90">
+                        <p class="text-[9px] font-bold truncate">${title}</p>
+                        <p class="text-[7px] text-gray-400">${year || 'TBA'}</p>
+                        <button onclick="addAnime('${title.replace(/'/g, "\\'")}', '${a.images.jpg.large_image_url}')" class="text-[8px] text-cyan-400 font-bold uppercase mt-1">+ TRACK</button>
                     </div>`;
                 grid.appendChild(card);
             });
+
+            if (grid.innerHTML === '') {
+                grid.innerHTML = '<div class="col-span-2 text-center text-xs text-gray-500 py-10">No new seasons found for 2026+.</div>';
+            }
         }
 
         window.performSearch = async () => {
-            const queryText = document.getElementById('manualSearchInput').value;
-            if(!queryText) return;
+            const q = document.getElementById('manualSearchInput').value;
+            if(!q) return;
             const grid = document.getElementById('discoveryGrid');
-            grid.innerHTML = '<div class="col-span-2 text-center text-xs animate-pulse py-10">SEARCHING DATABASE...</div>';
-            
+            grid.innerHTML = '<div class="col-span-2 text-center text-[10px] animate-pulse py-10">FILTERING FUTURE CORES...</div>';
             try {
-                const res = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(queryText)}&limit=10`);
+                const res = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(q)}&order_by=start_date&sort=desc`);
                 const json = await res.json();
                 renderGrid(json.data);
-            } catch(e) { showNotify("Search failed"); }
+            } catch(e) { showNotify("Search Error"); }
         };
 
-        window.loadDiscovery = async (season = 'upcoming') => {
+        window.loadDiscovery = async (season) => {
             const grid = document.getElementById('discoveryGrid');
-            grid.innerHTML = '<div class="col-span-2 text-center text-xs animate-pulse py-10">SCANNING 2026 SEASON...</div>';
-            
-            let url = season === 'upcoming' 
-                ? 'https://api.jikan.moe/v4/seasons/upcoming' 
-                : `https://api.jikan.moe/v4/seasons/2026/${season}`;
-            
+            grid.innerHTML = '<div class="col-span-2 text-center text-[10px] py-10 animate-pulse">SCANNING 2026...</div>';
+            let url = season === 'upcoming' ? 'https://api.jikan.moe/v4/seasons/upcoming' : `https://api.jikan.moe/v4/seasons/2026/${season}`;
             try {
                 const res = await fetch(url);
                 const json = await res.json();
@@ -145,10 +152,10 @@
 
         window.addAnime = async (title, img) => {
             await addDoc(animeCol, { title, image: img, ep: 1, updated: Date.now() });
-            showNotify("Added: " + title);
+            showNotify("Added to Collection");
         };
 
-        // HOME LIST LOGIC
+        // HOME LIST
         onSnapshot(query(animeCol, orderBy("updated", "desc")), (snap) => {
             const list = document.getElementById('myAnimeList');
             list.innerHTML = '';
@@ -159,27 +166,25 @@
                 div.innerHTML = `
                     <img src="${a.image}" class="w-12 h-16 rounded object-cover shadow-lg">
                     <div class="flex-1">
-                        <h3 class="text-[11px] font-bold uppercase truncate w-40 text-cyan-50">${a.title}</h3>
+                        <h3 class="text-[10px] font-bold uppercase truncate w-32">${a.title}</h3>
                         <div class="flex items-center gap-4 mt-2">
-                            <button onclick="up('${d.id}',${a.ep},-1)" class="w-8 h-8 glass rounded-lg">-</button>
-                            <span class="text-white font-cyber">${a.ep}</span>
-                            <button onclick="up('${d.id}',${a.ep},1)" class="w-8 h-8 bg-cyan-500 text-black font-bold rounded-lg shadow-cyan-500/50 shadow-md">+</button>
+                            <button onclick="up('${d.id}',${a.ep},-1)" class="w-7 h-7 glass rounded">-</button>
+                            <span class="text-xs font-cyber">${a.ep}</span>
+                            <button onclick="up('${d.id}',${a.ep},1)" class="w-7 h-7 bg-cyan-500 text-black font-bold rounded shadow-lg shadow-cyan-500/20">+</button>
                         </div>
                     </div>
-                    <button onclick="del('${d.id}')" class="absolute top-2 right-2 text-gray-500 hover:text-red-500 p-2">✕</button>`;
+                    <button onclick="del('${d.id}')" class="absolute top-2 right-2 text-gray-700">✕</button>`;
                 list.appendChild(div);
             });
         });
 
         window.up = (id, c, ch) => {
-            if (c + ch < 0) return;
+            if(c+ch < 0) return;
             updateDoc(doc(db, 'myAnime', id), { ep: c+ch, updated: Date.now() });
-            showNotify("Episode Updated");
+            showNotify("EPISODE SYNCED");
         };
 
-        window.del = (id) => { if(confirm('Erase this core from memory?')) deleteDoc(doc(db, 'myAnime', id)); };
-        
-        loadDiscovery();
+        window.del = (id) => { if(confirm('Erase core?')) deleteDoc(doc(db, 'myAnime', id)); };
     </script>
 </body>
 </html>
