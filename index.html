@@ -3,106 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#00f3ff">
-    <title>Just Alya</title>
+    <title>Just Alya - Fixed Search</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --neon-blue: #00f3ff; --neon-purple: #9d00ff; }
-        body { background: #050505; color: white; font-family: 'Rajdhani', sans-serif; min-height: 100vh; padding-bottom: 120px; overflow-x: hidden; }
+        body { background: #050505; color: white; font-family: 'Rajdhani', sans-serif; min-height: 100vh; padding-bottom: 100px; }
         .font-cyber { font-family: 'Orbitron', sans-serif; }
-        .glass { background: rgba(20, 20, 30, 0.95); border: 1px solid rgba(255,255,255,0.1); }
-        
-        /* FIX: Gray Box completely hidden if no image */
-        .char-overlay { position: fixed; width: 50%; max-width: 300px; opacity: 0.15; z-index: -1; bottom: 0; right: -20px; pointer-events: none; transition: opacity 0.5s; }
-        
-        .active-season { background: var(--neon-blue) !important; color: black !important; border-color: var(--neon-blue) !important; box-shadow: 0 0 15px var(--neon-blue); font-weight: 900; }
-        .nav-btn { opacity: 0.5; transition: 0.3s; }
-        .nav-active { opacity: 1; color: var(--neon-blue); filter: drop-shadow(0 0 5px var(--neon-blue)); }
+        .glass { background: rgba(20, 20, 30, 0.9); border: 1px solid rgba(255,255,255,0.1); }
+        .active-season { background: #00f3ff !important; color: black !important; box-shadow: 0 0 15px #00f3ff; }
         .tab-content { display: none; }
         .active-tab { display: block; }
-        
-        /* FIX: Image Clarity */
-        .card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-        select { background: #111; color: white; border: 1px solid #333; outline: none; }
+        .nav-active { color: #00f3ff; opacity: 1 !important; filter: drop-shadow(0 0 5px #00f3ff); }
+        /* Toast Notification */
+        #toast { visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 100; left: 50%; bottom: 100px; transform: translateX(-50%); border: 1px solid #00f3ff; }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 100px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 100px; opacity: 1;} to {bottom: 0; opacity: 0;} }
     </style>
 </head>
 <body>
 
-    <img src="https://static.wikia.nocookie.net/roshidere/images/3/3c/Alya_Anime_Design.png" 
-         class="char-overlay" 
-         style="display:none"
-         onload="this.style.display='block'"
-         onerror="this.style.display='none'">
+    <div id="toast">Core Updated</div>
 
-    <div id="home-tab" class="tab-content active-tab p-4 mx-auto max-w-xl">
-        <header class="flex justify-between items-center mb-6">
-            <h1 class="font-cyber text-2xl text-cyan-400 italic tracking-widest drop-shadow-[0_0_10px_rgba(0,243,255,0.5)]">JUST ALYA</h1>
-            <select id="homeGenre" class="text-[10px] p-2 rounded uppercase" onchange="filterHome()">
-                <option value="all">ALL SAVED</option>
-                <option value="Action">Action</option>
-                <option value="Romance">Romance</option>
-                <option value="Isekai">Isekai</option>
-                <option value="Fantasy">Fantasy</option>
-                <option value="Sci-Fi">Sci-Fi</option>
-                <option value="Slice of Life">Slice of Life</option>
-            </select>
-        </header>
-
-        <input id="homeSearch" type="text" placeholder="Search my collection..." class="w-full glass p-4 rounded-xl mb-6 outline-none border-cyan-500/20 text-white placeholder-gray-500 focus:border-cyan-500 transition-colors" onkeyup="filterHome()">
-        
+    <div id="home-tab" class="tab-content active-tab p-4 max-w-xl mx-auto">
+        <h1 class="font-cyber text-cyan-400 text-2xl mb-6 tracking-tighter">ALYA SYSTEM</h1>
+        <input id="homeSearch" type="text" placeholder="Search saved cores..." class="w-full glass p-4 rounded-xl mb-6 outline-none" onkeyup="filterHome()">
         <div id="myAnimeList" class="space-y-4"></div>
     </div>
 
-    <div id="discovery-tab" class="tab-content p-4 mx-auto max-w-xl">
-        <header class="flex justify-between items-center mb-6">
-            <h1 class="font-cyber text-xl text-purple-400">DISCOVERY</h1>
-            <select id="discGenre" class="text-[10px] p-2 rounded uppercase bg-purple-900/20 border-purple-500/30" onchange="loadDiscovery()">
-                <option value="all">ALL TYPES</option>
-                <option value="1">Action</option>
-                <option value="2">Adventure</option>
-                <option value="4">Comedy</option>
-                <option value="8">Drama</option>
-                <option value="10">Fantasy</option>
-                <option value="22">Romance</option>
-                <option value="24">Sci-Fi</option>
-                <option value="36">Slice of Life</option>
-                <option value="37">Supernatural</option>
-                <option value="62">Isekai</option>
-            </select>
-        </header>
-
+    <div id="discovery-tab" class="tab-content p-4 max-w-xl mx-auto">
+        <h1 class="font-cyber text-purple-400 text-2xl mb-4">DISCOVERY</h1>
+        
         <div class="glass p-4 rounded-xl mb-6 border-purple-500/30">
-            <h3 class="text-[10px] text-purple-300 mb-2 uppercase font-bold">Add Specific Anime</h3>
-            <div class="flex gap-2 mb-3">
-                <input id="manualSearchInput" type="text" placeholder="Type name (e.g. Naruto)..." class="flex-1 bg-black/50 p-3 rounded text-xs outline-none border border-white/10 focus:border-purple-500">
-                <button onclick="manualSearch()" class="bg-purple-600 px-4 rounded font-bold text-xs uppercase hover:bg-purple-500 transition">Find</button>
+            <div class="flex gap-2">
+                <input id="manualSearchInput" type="text" placeholder="Search name (e.g. Jack of all trades)..." class="flex-1 bg-black/50 p-3 rounded text-sm outline-none border border-white/10">
+                <button onclick="performSearch()" class="bg-purple-600 px-4 rounded font-bold text-xs uppercase">Search</button>
             </div>
-            
-            <details class="text-xs text-gray-400">
-                <summary class="cursor-pointer mb-2 hover:text-white">Mass Import List</summary>
-                <textarea id="massInput" placeholder="Paste list of names here..." class="w-full bg-black/50 p-3 rounded text-xs h-20 outline-none border border-white/10 mb-2"></textarea>
-                <button onclick="massSync()" id="syncBtn" class="w-full py-2 bg-white/10 rounded text-[10px] font-bold uppercase hover:bg-white/20">Sync List</button>
-            </details>
+            <p class="text-[9px] text-gray-500 mt-2 uppercase">Search for any anime to see results below</p>
         </div>
 
-        <div class="flex gap-3 mb-4 overflow-x-auto pb-2 no-scrollbar">
-            <button id="btn-upcoming" onclick="changeSeason('upcoming')" class="px-5 py-2 glass rounded-full text-[10px] font-bold uppercase border border-white/20 active-season whitespace-nowrap transition-all duration-300">Upcoming</button>
-            <button id="btn-winter" onclick="changeSeason('winter')" class="px-5 py-2 glass rounded-full text-[10px] font-bold uppercase border border-white/20 whitespace-nowrap transition-all duration-300">Winter 2026</button>
-            <button id="btn-summer" onclick="changeSeason('summer')" class="px-5 py-2 glass rounded-full text-[10px] font-bold uppercase border border-white/20 whitespace-nowrap transition-all duration-300">Summer 2026</button>
+        <div class="flex gap-2 mb-6 overflow-x-auto pb-2 no-scrollbar">
+            <button id="btn-upcoming" onclick="changeSeason('upcoming')" class="active-season px-5 py-2 glass rounded-full text-[10px] font-bold uppercase whitespace-nowrap">Upcoming</button>
+            <button id="btn-winter" onclick="changeSeason('winter')" class="px-5 py-2 glass rounded-full text-[10px] font-bold uppercase whitespace-nowrap">Winter 2026</button>
+            <button id="btn-summer" onclick="changeSeason('summer')" class="px-5 py-2 glass rounded-full text-[10px] font-bold uppercase whitespace-nowrap">Summer 2026</button>
         </div>
 
-        <div id="loadingIndicator" class="text-center text-xs text-cyan-400 mb-4 hidden tracking-widest animate-pulse">SCANNING DATABASE...</div>
         <div id="discoveryGrid" class="grid grid-cols-2 gap-4"></div>
     </div>
 
-    <div class="fixed bottom-0 left-0 right-0 glass border-t border-cyan-500/30 flex justify-around p-4 z-50 backdrop-blur-xl">
-        <button onclick="switchTab('home')" id="home-nav" class="nav-btn nav-active flex flex-col items-center">
-            <span class="text-2xl">🏠</span><span class="text-[9px] font-bold mt-1">HOME</span>
+    <div class="fixed bottom-0 left-0 right-0 glass flex justify-around p-4 z-50 backdrop-blur-md">
+        <button onclick="switchTab('home')" id="home-nav" class="nav-active flex flex-col items-center opacity-50">
+            <span class="text-xl">🏠</span><span class="text-[10px] font-bold mt-1">HOME</span>
         </button>
-        <button onclick="switchTab('discovery')" id="discovery-nav" class="nav-btn flex flex-col items-center">
-            <span class="text-2xl">🛰️</span><span class="text-[9px] font-bold mt-1">DISCOVERY</span>
+        <button onclick="switchTab('discovery')" id="discovery-nav" class="flex flex-col items-center opacity-50">
+            <span class="text-xl">🛰️</span><span class="text-[10px] font-bold mt-1">DISCOVERY</span>
         </button>
     </div>
 
@@ -121,178 +75,111 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const animeCol = collection(db, "myAnime");
-        
-        let fullData = [];
-        let currentSeason = 'upcoming';
 
-        window.switchTab = (tab) => {
+        function showNotify(msg) {
+            const x = document.getElementById("toast");
+            x.innerText = msg;
+            x.className = "show";
+            setTimeout(() => { x.className = x.className.replace("show", ""); }, 3000);
+        }
+
+        window.switchTab = (t) => {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active-tab'));
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('nav-active'));
-            document.getElementById(tab + '-tab').classList.add('active-tab');
-            document.getElementById(tab + '-nav').classList.add('nav-active');
-            if(tab === 'discovery') loadDiscovery();
+            document.querySelectorAll('button[id$="-nav"]').forEach(el => el.classList.remove('nav-active'));
+            document.getElementById(t + '-tab').classList.add('active-tab');
+            document.getElementById(t + '-nav').classList.add('nav-active');
+            if(t === 'discovery') loadDiscovery();
         };
 
-        window.changeSeason = (s) => { 
-            currentSeason = s; 
-            // FIX: Visual Button State Update
+        window.changeSeason = (s) => {
             document.querySelectorAll('button[id^="btn-"]').forEach(b => b.classList.remove('active-season'));
             document.getElementById('btn-' + s).classList.add('active-season');
-            loadDiscovery(); 
+            loadDiscovery(s);
         };
 
-        window.filterHome = () => {
-            const s = document.getElementById('homeSearch').value.toLowerCase();
-            const g = document.getElementById('homeGenre').value;
-            renderList(fullData.filter(a => {
-                const mS = (a.title || '').toLowerCase().includes(s);
-                const mG = g === 'all' || (a.genres && a.genres.includes(g));
-                return mS && mG;
-            }));
-        };
-
-        onSnapshot(query(animeCol, orderBy("updated", "desc")), (snap) => {
-            fullData = snap.docs.map(d => ({id: d.id, ...d.data()}));
-            renderList(fullData);
-        });
-
-        function renderList(data) {
-            const list = document.getElementById('myAnimeList');
-            list.innerHTML = '';
-            if(data.length === 0) {
-                list.innerHTML = '<div class="text-center text-gray-600 mt-10 text-xs">No anime tracked yet.</div>';
-                return;
-            }
+        // RENDER DISCOVERY GRID
+        function renderGrid(data) {
+            const grid = document.getElementById('discoveryGrid');
+            grid.innerHTML = '';
             data.forEach(a => {
-                const div = document.createElement('div');
-                div.className = 'glass p-3 rounded-xl flex gap-3 items-center relative border border-white/5';
-                div.innerHTML = `<img src="${a.image}" class="w-12 h-16 rounded object-cover">
-                    <div class="flex-1">
-                        <h3 class="text-[10px] font-bold uppercase truncate w-40 text-cyan-50">${a.title}</h3>
-                        <p class="text-[8px] text-cyan-400 mt-1 font-mono">${a.date || 'TBA'}</p>
-                        <div class="flex items-center gap-3 mt-2">
-                            <button onclick="up('${a.id}',${a.ep},-1)" class="w-6 h-6 glass rounded flex items-center justify-center hover:bg-white/10">-</button>
-                            <span class="text-sm font-cyber text-white w-4 text-center">${a.ep}</span>
-                            <button onclick="up('${a.id}',${a.ep},1)" class="w-6 h-6 bg-cyan-500 text-black font-bold rounded flex items-center justify-center hover:bg-cyan-400 shadow-[0_0_10px_rgba(0,243,255,0.4)]">+</button>
-                        </div>
-                    </div>
-                    <button onclick="del('${a.id}')" class="absolute top-2 right-2 text-red-400 text-xs p-2 hover:text-red-300">✕</button>`;
-                list.appendChild(div);
+                const title = a.title_english || a.title;
+                const card = document.createElement('div');
+                card.className = 'glass rounded-xl overflow-hidden relative h-52 group cursor-pointer';
+                card.innerHTML = `
+                    <img src="${a.images.jpg.large_image_url}" class="w-full h-full object-cover">
+                    <div class="absolute bottom-0 w-full p-2 bg-black/80">
+                        <p class="text-[10px] font-bold truncate">${title}</p>
+                        <button onclick="addAnime('${title}', '${a.images.jpg.large_image_url}')" class="text-[9px] text-green-400 font-bold uppercase mt-1">+ Add to List</button>
+                    </div>`;
+                grid.appendChild(card);
             });
         }
 
-        window.loadDiscovery = async () => {
-            document.getElementById('loadingIndicator').classList.remove('hidden');
-            const genre = document.getElementById('discGenre').value;
+        window.performSearch = async () => {
+            const queryText = document.getElementById('manualSearchInput').value;
+            if(!queryText) return;
+            const grid = document.getElementById('discoveryGrid');
+            grid.innerHTML = '<div class="col-span-2 text-center text-xs animate-pulse py-10">SEARCHING DATABASE...</div>';
             
-            let url = currentSeason === 'upcoming' 
+            try {
+                const res = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(queryText)}&limit=10`);
+                const json = await res.json();
+                renderGrid(json.data);
+            } catch(e) { showNotify("Search failed"); }
+        };
+
+        window.loadDiscovery = async (season = 'upcoming') => {
+            const grid = document.getElementById('discoveryGrid');
+            grid.innerHTML = '<div class="col-span-2 text-center text-xs animate-pulse py-10">SCANNING 2026 SEASON...</div>';
+            
+            let url = season === 'upcoming' 
                 ? 'https://api.jikan.moe/v4/seasons/upcoming' 
-                : `https://api.jikan.moe/v4/seasons/2026/${currentSeason}`;
-            
-            if(genre !== 'all') url += `?filter=tv&genres=${genre}`;
+                : `https://api.jikan.moe/v4/seasons/2026/${season}`;
             
             try {
                 const res = await fetch(url);
                 const json = await res.json();
-                const grid = document.getElementById('discoveryGrid');
-                grid.innerHTML = '';
-                
-                const seenTitles = new Set(); // FIX: Duplicate Filter
-
-                if(!json.data || json.data.length === 0) {
-                    grid.innerHTML = '<div class="col-span-2 text-center text-xs text-gray-500 py-10">No Anime Found.</div>';
-                }
-
-                json.data.forEach(a => {
-                    const title = a.title_english || a.title;
-                    // FIX: Check for duplicates
-                    if(seenTitles.has(title)) return;
-                    seenTitles.add(title);
-
-                    const div = document.createElement('div');
-                    div.className = 'glass rounded-xl overflow-hidden h-56 relative active:scale-95 transition cursor-pointer group border border-white/10';
-                    div.onclick = () => {
-                        addDoc(animeCol, { 
-                            title: title, 
-                            image: a.images.jpg.large_image_url, 
-                            ep: 1, 
-                            date: a.aired.string ? a.aired.string.split(' to')[0] : '2026', 
-                            genres: a.genres.map(g => g.name), 
-                            updated: Date.now() 
-                        });
-                        alert('Added: ' + title);
-                    };
-                    // FIX: Image quality and gradient overlay
-                    div.innerHTML = `<img src="${a.images.jpg.large_image_url}" class="card-img group-hover:scale-105 transition duration-500">
-                        <div class="absolute bottom-0 p-3 bg-gradient-to-t from-black via-black/90 to-transparent w-full">
-                            <p class="text-[10px] font-bold leading-tight line-clamp-2 text-white drop-shadow-md">${title}</p>
-                            <div class="flex justify-between items-center mt-1">
-                                <span class="text-[8px] text-gray-400 uppercase">${a.type || 'TV'}</span>
-                                <span class="text-[8px] text-green-400 font-bold tracking-wider">+ ADD</span>
-                            </div>
-                        </div>`;
-                    grid.appendChild(div);
-                });
-            } catch(e) { console.error(e); }
-            document.getElementById('loadingIndicator').classList.add('hidden');
+                renderGrid(json.data);
+            } catch(e) { grid.innerHTML = "Offline"; }
         };
 
-        window.manualSearch = async () => {
-            const q = document.getElementById('manualSearchInput').value;
-            if(!q) return;
-            // Search button feedback
-            const btn = document.querySelector('button[onclick="manualSearch()"]');
-            const originalText = btn.innerText;
-            btn.innerText = "...";
-            
-            try {
-                const res = await fetch(`https://api.jikan.moe/v4/anime?q=${q}&limit=1`);
-                const json = await res.json();
-                if(json.data?.[0]) {
-                    const a = json.data[0];
-                    addDoc(animeCol, { 
-                        title: a.title_english || a.title, 
-                        image: a.images.jpg.large_image_url, 
-                        ep: 1, 
-                        date: a.aired?.string || 'Unknown', 
-                        genres: a.genres.map(g => g.name), 
-                        updated: Date.now() 
-                    });
-                    alert('Found & Added: ' + (a.title_english || a.title));
-                } else {
-                    alert('Not found!');
-                }
-            } catch(e) { alert('Error'); }
-            btn.innerText = originalText;
+        window.addAnime = async (title, img) => {
+            await addDoc(animeCol, { title, image: img, ep: 1, updated: Date.now() });
+            showNotify("Added: " + title);
         };
 
-        window.massSync = async () => {
-            const val = document.getElementById('massInput').value;
-            const names = val.split(/[\n,]/);
-            const btn = document.getElementById('syncBtn');
-            btn.innerText = "Processing...";
-            for(let name of names) {
-                if(!name.trim()) continue;
-                try {
-                    const res = await fetch('https://api.jikan.moe/v4/anime?q=' + name.trim() + '&limit=1');
-                    const json = await res.json();
-                    if(json.data[0]) {
-                        const a = json.data[0];
-                        await addDoc(animeCol, { title: a.title_english || a.title, image: a.images.jpg.large_image_url, ep: 1, date: a.aired.string, genres: a.genres.map(g => g.name), updated: Date.now() });
-                    }
-                    await new Promise(r => setTimeout(r, 800)); // Delay to prevent API ban
-                } catch(e) {}
-            }
-            btn.innerText = "Sync List";
-            document.getElementById('massInput').value = '';
+        // HOME LIST LOGIC
+        onSnapshot(query(animeCol, orderBy("updated", "desc")), (snap) => {
+            const list = document.getElementById('myAnimeList');
+            list.innerHTML = '';
+            snap.forEach(d => {
+                const a = d.data();
+                const div = document.createElement('div');
+                div.className = 'glass p-3 rounded-xl flex gap-3 items-center relative';
+                div.innerHTML = `
+                    <img src="${a.image}" class="w-12 h-16 rounded object-cover shadow-lg">
+                    <div class="flex-1">
+                        <h3 class="text-[11px] font-bold uppercase truncate w-40 text-cyan-50">${a.title}</h3>
+                        <div class="flex items-center gap-4 mt-2">
+                            <button onclick="up('${d.id}',${a.ep},-1)" class="w-8 h-8 glass rounded-lg">-</button>
+                            <span class="text-white font-cyber">${a.ep}</span>
+                            <button onclick="up('${d.id}',${a.ep},1)" class="w-8 h-8 bg-cyan-500 text-black font-bold rounded-lg shadow-cyan-500/50 shadow-md">+</button>
+                        </div>
+                    </div>
+                    <button onclick="del('${d.id}')" class="absolute top-2 right-2 text-gray-500 hover:text-red-500 p-2">✕</button>`;
+                list.appendChild(div);
+            });
+        });
+
+        window.up = (id, c, ch) => {
+            if (c + ch < 0) return;
+            updateDoc(doc(db, 'myAnime', id), { ep: c+ch, updated: Date.now() });
+            showNotify("Episode Updated");
         };
 
-        window.up = (id, c, ch) => updateDoc(doc(db, 'myAnime', id), { ep: c+ch, updated: Date.now() });
-        window.del = (id) => { if(confirm('Delete this anime?')) deleteDoc(doc(db, 'myAnime', id)); };
-
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js');
-        }
+        window.del = (id) => { if(confirm('Erase this core from memory?')) deleteDoc(doc(db, 'myAnime', id)); };
+        
+        loadDiscovery();
     </script>
 </body>
 </html>
