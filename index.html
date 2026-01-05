@@ -5,65 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    
-    <link rel="apple-touch-icon" href="https://p16-capcut-va.ibyteimg.com/tos-alisg-v-643f8e/o0f7n8A7gIIE1mAnBAAezfUAn7eDWAEjfDCAIA~tplv-nh78p5uayg-1.webp">
     <link rel="icon" href="https://p16-capcut-va.ibyteimg.com/tos-alisg-v-643f8e/o0f7n8A7gIIE1mAnBAAezfUAn7eDWAEjfDCAIA~tplv-nh78p5uayg-1.webp">
-
-    <title>Infinity System v2.4</title>
+    
+    <title>Just Alya</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root { --neon-blue: #00f3ff; --neon-purple: #9d00ff; }
-        body { background: #020205; color: white; font-family: 'Rajdhani', sans-serif; min-height: 100vh; padding-bottom: 120px; background-image: radial-gradient(circle at 50% 0%, #111827 0%, #020205 100%); overflow-x: hidden; }
+        body { background: #020205; color: white; font-family: 'Rajdhani', sans-serif; min-height: 100vh; overflow-x: hidden; }
         .font-cyber { font-family: 'Orbitron', sans-serif; }
         .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
-        .char-overlay { position: fixed; width: 350px; opacity: 0.2; z-index: -1; pointer-events: none; bottom: -20px; right: -50px; filter: drop-shadow(0 0 20px #00f3ff); }
-        .anime-card { background: linear-gradient(145deg, rgba(20,20,30,0.95), rgba(5,5,10,0.98)); border-radius: 24px; border: 1px solid rgba(0,243,255,0.1); }
+        .char-overlay { position: fixed; width: 300px; opacity: 0.15; z-index: -1; bottom: 0; right: -20px; pointer-events: none; }
+        .anime-card { background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
         .btn-neon { background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); color: black; font-weight: 900; }
-        .tab-active { border-bottom: 3px solid var(--neon-blue); color: var(--neon-blue); }
-        .mobile-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(10,10,15,0.95); display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid var(--neon-blue); z-index: 100; backdrop-filter: blur(10px); }
+        .nav-btn { opacity: 0.5; transition: 0.3s; }
+        .nav-active { opacity: 1; color: var(--neon-blue); filter: drop-shadow(0 0 5px var(--neon-blue)); }
+        .tab-content { display: none; padding-bottom: 100px; }
+        .active-tab { display: block; }
     </style>
 </head>
 <body>
 
     <img src="https://static.wikia.nocookie.net/shirayuki/images/c/c5/Alya_full_body.png" class="char-overlay">
 
-    <div class="p-4 max-w-xl mx-auto">
-        <header class="flex justify-between items-center mb-6 pt-2">
-            <div>
-                <h1 class="font-cyber text-xl text-cyan-400 italic uppercase">Infinity System</h1>
-                <p id="totalCount" class="text-[10px] font-bold text-purple-400 tracking-widest uppercase">Initializing Alya-Link...</p>
-            </div>
-            <button onclick="requestNotifs()" class="w-10 h-10 glass rounded-full flex items-center justify-center border-cyan-500/30 text-lg">🔔</button>
+    <div id="home-tab" class="tab-content active-tab p-4 mx-auto max-w-xl">
+        <header class="flex justify-between items-center mb-6">
+            <h1 class="font-cyber text-xl text-cyan-400 italic underline decoration-purple-600">JUST ALYA</h1>
+            <select id="homeGenre" class="bg-black/80 border border-cyan-500/30 rounded-lg text-[10px] p-1 uppercase" onchange="filterHome()">
+                <option value="all">Genres</option>
+                <option value="Action">Action</option>
+                <option value="Romance">Romance</option>
+                <option value="Isekai">Isekai</option>
+                <option value="Supernatural">Supernatural</option>
+            </select>
         </header>
-
-        <div id="commandCenter" class="glass p-5 rounded-[2.5rem] mb-8 border-b-2 border-cyan-500 shadow-lg">
-            <input id="searchInput" type="text" placeholder="Search Anime..." class="w-full bg-black/60 border border-white/10 p-4 rounded-2xl text-white text-sm outline-none mb-4 focus:border-cyan-400">
-            <div class="flex gap-3">
-                <button onclick="manualSearch()" class="flex-1 btn-neon py-3 rounded-xl text-[10px] uppercase font-black">Search</button>
-                <button onclick="massSync()" id="syncBtn" class="flex-1 bg-white/5 border border-white/10 py-3 rounded-xl text-[10px] uppercase text-white font-bold">Mass Sync</button>
-            </div>
-        </div>
-
-        <h2 class="font-cyber text-[10px] text-white mb-4 px-2 tracking-widest uppercase">My Archives</h2>
-        <div id="myAnimeList" class="space-y-4 mb-12"></div>
-
-        <div class="mt-16">
-            <div class="flex gap-8 mb-6 border-b border-white/5 px-2">
-                <button onclick="loadDiscovery('now')" id="tab-now" class="pb-2 text-[10px] font-cyber tab-active uppercase">Winter 2026</button>
-                <button onclick="loadDiscovery('upcoming')" id="tab-upcoming" class="pb-2 text-[10px] font-cyber text-gray-600 uppercase">Upcoming</button>
-            </div>
-            <div id="discoveryGrid" class="grid grid-cols-2 gap-4"></div>
-            <div id="loader" class="text-center py-10 text-cyan-500 font-cyber text-xs animate-pulse">ALYA IS SCANNING...</div>
-        </div>
+        
+        <input id="homeSearch" type="text" placeholder="Search saved cores..." class="w-full glass p-4 rounded-2xl mb-6 outline-none border-cyan-500/20" onkeyup="filterHome()">
+        <div id="myAnimeList" class="space-y-4"></div>
     </div>
 
-    <div class="mobile-nav">
-        <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="flex flex-col items-center">
-            <span class="text-xl">🏠</span><span class="text-[8px] font-bold mt-1 text-cyan-400 uppercase">Home</span>
+    <div id="discovery-tab" class="tab-content p-4 mx-auto max-w-xl">
+        <header class="mb-6">
+            <h1 class="font-cyber text-lg text-purple-400">DISCOVERY HUB</h1>
+            <p class="text-[9px] text-gray-500 uppercase tracking-tighter italic">Scanning 2026 Season...</p>
+        </header>
+
+        <div class="glass p-5 rounded-3xl mb-8">
+            <textarea id="massInput" placeholder="Paste your 50+ list here..." class="w-full bg-black/40 p-4 rounded-xl text-xs h-24 mb-3 outline-none border border-white/5"></textarea>
+            <button onclick="massSync()" id="syncBtn" class="w-full btn-neon py-3 rounded-xl text-[10px] uppercase font-black">Link Mass Cores</button>
+        </div>
+
+        <div id="discoveryGrid" class="grid grid-cols-2 gap-4"></div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 right-0 glass border-t border-cyan-500/30 flex justify-around p-4 z-50">
+        <button onclick="switchTab('home')" id="home-nav" class="nav-btn nav-active flex flex-col items-center">
+            <span class="text-xl">🏠</span><span class="text-[8px] font-bold mt-1">HOME</span>
         </button>
-        <button onclick="document.getElementById('commandCenter').scrollIntoView({behavior:'smooth'})" class="flex flex-col items-center">
-            <span class="text-xl">🚀</span><span class="text-[8px] font-bold mt-1 uppercase">Import</span>
+        <button onclick="switchTab('discovery')" id="discovery-nav" class="nav-btn flex flex-col items-center">
+            <span class="text-xl">🛰️</span><span class="text-[8px] font-bold mt-1">SCAN</span>
         </button>
     </div>
 
@@ -83,98 +84,102 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const animeCol = collection(db, "myAnime");
-        let trackedIds = new Set();
+        let fullData = [];
 
-        window.requestNotifs = () => { Notification.requestPermission(); };
-
-        window.loadDiscovery = async (type) => {
-            const tabs = ['tab-now', 'tab-upcoming'];
-            tabs.forEach(t => document.getElementById(t).className = t.includes(type) ? 'pb-2 text-[10px] font-cyber tab-active uppercase' : 'pb-2 text-[10px] font-cyber text-gray-600 uppercase');
-            const grid = document.getElementById('discoveryGrid');
-            const loader = document.getElementById('loader');
-            grid.innerHTML = '';
-            loader.style.display = 'block';
-            try {
-                const res = await fetch(`https://api.jikan.moe/v4/seasons/${type === 'now' ? 'now' : 'upcoming'}`);
-                const json = await res.json();
-                json.data.filter(a => !trackedIds.has(a.mal_id)).forEach(a => {
-                    const div = document.createElement('div');
-                    div.className = 'glass rounded-[2rem] overflow-hidden relative h-56 border-b-4 border-purple-600 active:scale-95 transition-all';
-                    div.onclick = () => addAnime(a);
-                    div.innerHTML = `<img src="${a.images.jpg.large_image_url}" class="w-full h-full object-cover opacity-70"><div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black via-black/90 to-transparent"><p class="text-[10px] font-bold text-white uppercase truncate">${a.title}</p><p class="text-[8px] text-cyan-400 font-black">+ SYNC</p></div>`;
-                    grid.appendChild(div);
-                });
-                loader.style.display = 'none';
-            } catch(e) { loader.innerText = "LINK ERROR"; }
+        window.switchTab = (tab) => {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active-tab'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('nav-active'));
+            document.getElementById(tab + '-tab').classList.add('active-tab');
+            document.getElementById(tab + '-nav').classList.add('nav-active');
+            if(tab === 'discovery') loadDiscovery();
         };
 
-        window.addAnime = async (a) => {
-            await addDoc(animeCol, {
-                title: a.title_english || a.title,
-                image: a.images.jpg.large_image_url,
-                ep: 1, 
-                date: a.aired?.from ? a.aired.from.split('T')[0] : '2026',
-                mal_id: a.mal_id, 
-                updated: Date.now()
-            });
-        };
-
-        window.manualSearch = async () => {
-            const q = document.getElementById('searchInput').value;
-            if(!q) return;
-            const res = await fetch(`https://api.jikan.moe/v4/anime?q=${q}&limit=1`);
-            const json = await res.json();
-            if(json.data?.[0]) addAnime(json.data[0]);
-            document.getElementById('searchInput').value = '';
-        };
-
-        window.massSync = async () => {
-            const val = document.getElementById('searchInput').value;
-            if(!val) return;
-            const names = val.split(/[,\n]/).map(n => n.trim()).filter(n => n);
-            document.getElementById('syncBtn').innerText = "SYNCING...";
-            for(let name of names) {
-                try {
-                    const res = await fetch(`https://api.jikan.moe/v4/anime?q=${name}&limit=1`);
-                    const json = await res.json();
-                    if(json.data?.[0]) await addAnime(json.data[0]);
-                    await new Promise(r => setTimeout(r, 1000));
-                } catch(e){}
-            }
-            document.getElementById('syncBtn').innerText = "MASS SYNC";
-            document.getElementById('searchInput').value = '';
+        window.filterHome = () => {
+            const search = document.getElementById('homeSearch').value.toLowerCase();
+            const genre = document.getElementById('homeGenre').value;
+            renderList(fullData.filter(a => {
+                const matchSearch = a.title.toLowerCase().includes(search);
+                const matchGenre = genre === 'all' || (a.genres && a.genres.includes(genre));
+                return matchSearch && matchGenre;
+            }));
         };
 
         onSnapshot(query(animeCol, orderBy("updated", "desc")), (snap) => {
-            const list = document.getElementById('myAnimeList');
-            list.innerHTML = ''; trackedIds.clear();
-            let count = 0;
-            snap.forEach(d => {
-                const a = d.data(); count++;
-                if(a.mal_id) trackedIds.add(a.mal_id);
-                const card = document.createElement('div');
-                card.className = 'anime-card p-4 flex gap-5 items-center relative overflow-hidden shadow-2xl';
-                card.innerHTML = `
-                    <div class="absolute top-0 right-0 w-32 h-full bg-cyan-500/5 -skew-x-12 translate-x-16"></div>
-                    <img src="${a.image}" class="w-16 h-24 object-cover rounded-2xl shadow-lg z-10">
-                    <div class="flex-1 min-w-0 z-10">
-                        <h3 class="text-[11px] font-cyber text-white truncate pr-8 uppercase italic">${a.title}</h3>
-                        <p class="text-[9px] text-cyan-400/60 font-bold mt-1 uppercase tracking-tighter">DATA: ${a.date}</p>
-                        <div class="flex items-center gap-6 mt-3">
-                            <button onclick="up('${d.id}',${a.ep},-1)" class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-xl active:bg-cyan-500/20">-</button>
-                            <span class="text-2xl font-cyber text-cyan-400 drop-shadow-[0_0_8px_#00f3ff]">${a.ep}</span>
-                            <button onclick="up('${d.id}',${a.ep},1)" class="w-9 h-9 rounded-xl btn-neon flex items-center justify-center text-xl shadow-[0_0_15px_#00f3ff]">+</button>
-                        </div>
-                    </div>
-                    <button onclick="del('${d.id}')" class="absolute top-2 right-4 text-white/20 text-lg">×</button>`;
-                list.appendChild(card);
-            });
-            document.getElementById('totalCount').innerText = `${count} DATABASE CORES ONLINE`;
-            loadDiscovery('now');
+            fullData = snap.docs.map(d => ({id: d.id, ...d.data()}));
+            renderList(fullData);
         });
 
+        function renderList(data) {
+            const list = document.getElementById('myAnimeList');
+            list.innerHTML = '';
+            data.forEach(a => {
+                const div = document.createElement('div');
+                div.className = 'anime-card p-4 flex gap-4 items-center relative';
+                div.innerHTML = '<img src="' + a.image + '" class="w-14 h-20 rounded-xl object-cover">' +
+                    '<div class="flex-1">' +
+                        '<h3 class="text-xs font-bold uppercase truncate w-40">' + a.title + '</h3>' +
+                        '<p class="text-[8px] text-cyan-400 mt-1 uppercase tracking-widest">' + a.date + '</p>' +
+                        '<div class="flex items-center gap-4 mt-2">' +
+                            '<button onclick="up(\''+a.id+'\','+a.ep+',-1)" class="w-8 h-8 glass rounded-lg">-</button>' +
+                            '<span class="text-lg font-cyber">' + a.ep + '</span>' +
+                            '<button onclick="up(\''+a.id+'\','+a.ep+',1)" class="w-8 h-8 btn-neon rounded-lg">+</button>' +
+                        '</div>' +
+                    '</div>' +
+                    '<button onclick="del(\''+a.id+'\')" class="absolute top-2 right-4 text-white/20">×</button>';
+                list.appendChild(div);
+            });
+        }
+
+        window.massSync = async () => {
+            const val = document.getElementById('massInput').value;
+            const names = val.split(/[\n,]/);
+            const btn = document.getElementById('syncBtn');
+            btn.innerText = "ALYA IS SCANNING...";
+            for(let name of names) {
+                if(!name.trim()) continue;
+                try {
+                    const res = await fetch('https://api.jikan.moe/v4/anime?q=' + name.trim() + '&limit=1');
+                    const json = await res.json();
+                    if(json.data[0]) {
+                        const anime = json.data[0];
+                        if(anime.year >= 2025 || !anime.year) {
+                            await addDoc(animeCol, {
+                                title: anime.title,
+                                image: anime.images.jpg.large_image_url,
+                                ep: 1,
+                                date: anime.aired.string.split(' to')[0],
+                                genres: anime.genres.map(g => g.name),
+                                updated: Date.now()
+                            });
+                        }
+                    }
+                    await new Promise(r => setTimeout(r, 800));
+                } catch(e) {}
+            }
+            btn.innerText = "SCAN COMPLETE";
+            document.getElementById('massInput').value = '';
+        };
+
+        window.loadDiscovery = async () => {
+            const res = await fetch('https://api.jikan.moe/v4/seasons/upcoming');
+            const json = await res.json();
+            const grid = document.getElementById('discoveryGrid');
+            grid.innerHTML = '';
+            json.data.slice(0, 30).forEach(a => {
+                const div = document.createElement('div');
+                div.className = 'glass rounded-3xl overflow-hidden h-52 relative';
+                div.onclick = () => addDoc(animeCol, { title: a.title, image: a.images.jpg.large_image_url, ep: 1, date: a.aired.string, genres: a.genres.map(g => g.name), updated: Date.now() });
+                div.innerHTML = '<img src="' + a.images.jpg.large_image_url + '" class="w-full h-full object-cover opacity-50">' +
+                    '<div class="absolute bottom-0 p-2 bg-black/80 w-full">' +
+                        '<p class="text-[9px] font-bold truncate">' + a.title + '</p>' +
+                        '<p class="text-[7px] text-cyan-400 uppercase tracking-widest">+ Track Core</p>' +
+                    '</div>';
+                grid.appendChild(div);
+            });
+        };
+
         window.up = (id, c, ch) => updateDoc(doc(db, 'myAnime', id), { ep: c+ch, updated: Date.now() });
-        window.del = (id) => { if(confirm('Erase Core?')) deleteDoc(doc(db, 'myAnime', id)); };
+        window.del = (id) => { if(confirm('Erase core?')) deleteDoc(doc(db, 'myAnime', id)); };
     </script>
 </body>
 </html>
