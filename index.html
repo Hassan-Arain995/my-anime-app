@@ -3,50 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Alya - Exact Search Fix</title>
+    <title>Just Alya - System Repair</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
-        body { background: #050505; color: white; font-family: 'Rajdhani', sans-serif; min-height: 100vh; padding-bottom: 100px; }
+        body { background: #050505; color: white; font-family: 'Rajdhani', sans-serif; min-height: 100vh; padding-bottom: 100px; margin: 0; }
         .font-cyber { font-family: 'Orbitron', sans-serif; }
         .glass { background: rgba(20, 20, 30, 0.9); border: 1px solid rgba(255,255,255,0.1); }
-        .active-tab { display: block; }
         .tab-content { display: none; }
+        .active-tab { display: block; }
         .nav-active { color: #00f3ff; filter: drop-shadow(0 0 5px #00f3ff); opacity: 1 !important; }
         
-        /* Toast Notification */
-        #toast { visibility: hidden; min-width: 250px; background: #111; color: #00f3ff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 100px; transform: translateX(-50%); border: 1px solid #00f3ff; }
+        /* Fixed Notification Toast */
+        #toast { 
+            visibility: hidden; 
+            min-width: 200px; 
+            background: #111; 
+            color: #00f3ff; 
+            text-align: center; 
+            border-radius: 8px; 
+            padding: 12px; 
+            position: fixed; 
+            z-index: 9999; 
+            left: 50%; 
+            bottom: 90px; 
+            transform: translateX(-50%); 
+            border: 1px solid #00f3ff;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
         #toast.show { visibility: visible; animation: fadein 0.5s; }
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 100px; opacity: 1;} }
+        @keyframes fadein { from {opacity: 0; bottom: 0;} to {opacity: 1; bottom: 90px;} }
     </style>
 </head>
 <body>
 
-    <div id="toast">SYSTEM NOTIFICATION</div>
+    <div id="toast">SYSTEM INITIALIZED</div>
 
     <div id="home-tab" class="tab-content active-tab p-4 max-w-xl mx-auto">
-        <h1 class="font-cyber text-cyan-400 text-xl mb-6 tracking-widest">MY CORES</h1>
-        <div id="myAnimeList" class="space-y-4"></div>
+        <h1 class="font-cyber text-cyan-400 text-xl mb-4 tracking-tighter">MY CORES</h1>
+        <input id="homeSearch" type="text" placeholder="Search saved..." class="w-full glass p-3 rounded-xl mb-4 outline-none" onkeyup="filterHome()">
+        <div id="myAnimeList" class="space-y-3"></div>
     </div>
 
     <div id="discovery-tab" class="tab-content p-4 max-w-xl mx-auto">
-        <h1 class="font-cyber text-purple-400 text-xl mb-4">NEW RELEASES</h1>
+        <h1 class="font-cyber text-purple-400 text-xl mb-4">DISCOVERY HUB</h1>
         
         <div class="glass p-4 rounded-xl mb-6 border-purple-500/30">
             <div class="flex gap-2">
-                <input id="manualSearchInput" type="text" placeholder="Type name (e.g. Jack of all trades)..." class="flex-1 bg-black/50 p-3 rounded text-sm outline-none border border-white/10">
-                <button onclick="performSearch()" class="bg-purple-600 px-4 rounded font-bold text-xs">FIND</button>
+                <input id="manualSearchInput" type="text" placeholder="Search (e.g. Jack of all trades)..." class="flex-1 bg-black/50 p-3 rounded text-sm outline-none border border-white/10">
+                <button onclick="performSearch()" class="bg-purple-600 px-4 rounded font-bold text-xs uppercase">Find</button>
             </div>
             
-            <button onclick="forceAddFromInput()" class="w-full mt-3 py-2 border border-cyan-500/40 text-cyan-400 rounded text-[10px] font-bold uppercase hover:bg-cyan-500/10">
-                Add my typed text as a Core (Skip Search)
+            <button onclick="forceAddFromInput()" class="w-full mt-3 py-2 border border-cyan-500/40 text-cyan-400 rounded text-[10px] font-bold uppercase">
+                Add Name Exactly As Typed
             </button>
         </div>
 
         <div id="discoveryGrid" class="grid grid-cols-2 gap-4"></div>
     </div>
 
-    <div class="fixed bottom-0 left-0 right-0 glass flex justify-around p-4 z-50 backdrop-blur-md">
+    <div class="fixed bottom-0 left-0 right-0 glass flex justify-around p-4 z-50 backdrop-blur-md border-t border-white/5">
         <button onclick="switchTab('home')" id="home-nav" class="nav-active flex flex-col items-center opacity-40">
             <span class="text-xl">🏠</span><span class="text-[10px] font-bold mt-1">HOME</span>
         </button>
@@ -67,16 +85,18 @@
             messagingSenderId: "412459430656",
             appId: "1:412459430656:web:2560368142cc5d109f2575"
         };
+
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const animeCol = collection(db, "myAnime");
 
-        function showNotify(msg) {
+        // Fixed Toast Function
+        window.showNotify = (msg) => {
             const x = document.getElementById("toast");
             x.innerText = msg;
             x.classList.add("show");
             setTimeout(() => { x.classList.remove("show"); }, 3000);
-        }
+        };
 
         window.switchTab = (t) => {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active-tab'));
@@ -85,34 +105,25 @@
             document.getElementById(t + '-nav').classList.add('nav-active');
         };
 
-        // FORCE ADD: This fixes the "Wrong Anime" problem
-        window.forceAddFromInput = async () => {
-            const name = document.getElementById('manualSearchInput').value;
-            if(!name) return showNotify("Type a name first!");
-            
-            await addDoc(animeCol, { 
-                title: name, 
-                image: "https://via.placeholder.com/300x450?text=New+Release+2026", 
-                ep: 1, 
-                updated: Date.now() 
-            });
-            showNotify("Core Locked: " + name);
-            document.getElementById('manualSearchInput').value = "";
-        };
-
+        // SEARCH LOGIC: Filter for 2026+ only
         window.performSearch = async () => {
             const q = document.getElementById('manualSearchInput').value;
             if(!q) return;
             const grid = document.getElementById('discoveryGrid');
-            grid.innerHTML = '<div class="col-span-2 text-center text-[10px] animate-pulse py-10">SEARCHING DATABASE...</div>';
+            grid.innerHTML = '<div class="col-span-2 text-center text-[10px] animate-pulse py-10">FILTERING 2026 DATABASE...</div>';
             
             try {
-                // We use 'letter' filter to get more accurate title matches
-                const res = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(q)}&limit=10`);
+                const res = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(q)}&order_by=start_date&sort=desc`);
                 const json = await res.json();
                 
                 grid.innerHTML = '';
+                const currentYear = 2026;
+
                 json.data.forEach(a => {
+                    const year = a.year || (a.aired && a.aired.prop.from.year);
+                    // HIDE old seasons (before 2026)
+                    if (year && year < currentYear) return;
+
                     const title = a.title_english || a.title;
                     const card = document.createElement('div');
                     card.className = 'glass rounded-xl overflow-hidden relative h-52';
@@ -120,34 +131,48 @@
                         <img src="${a.images.jpg.large_image_url}" class="w-full h-full object-cover">
                         <div class="absolute bottom-0 w-full p-2 bg-black/90">
                             <p class="text-[9px] font-bold truncate">${title}</p>
-                            <button onclick="addAnime('${title.replace(/'/g, "\\'")}', '${a.images.jpg.large_image_url}')" class="text-[8px] text-cyan-400 font-bold uppercase mt-1">+ TRACK CORE</button>
+                            <button onclick="addAnime('${title.replace(/'/g, "\\'")}', '${a.images.jpg.large_image_url}')" class="text-[8px] text-cyan-400 font-bold uppercase mt-1">+ Add to List</button>
                         </div>`;
                     grid.appendChild(card);
                 });
-            } catch(e) { showNotify("Search Failed"); }
+            } catch(e) { window.showNotify("Search Error"); }
+        };
+
+        // MANUAL ADD BYPASS
+        window.forceAddFromInput = async () => {
+            const name = document.getElementById('manualSearchInput').value;
+            if(!name) return window.showNotify("Type a name first!");
+            await addDoc(animeCol, { 
+                title: name, 
+                image: "https://via.placeholder.com/300x450?text=2026+Core", 
+                ep: 1, 
+                updated: Date.now() 
+            });
+            window.showNotify("MANUAL ADD SUCCESS");
+            document.getElementById('manualSearchInput').value = "";
         };
 
         window.addAnime = async (title, img) => {
             await addDoc(animeCol, { title, image: img, ep: 1, updated: Date.now() });
-            showNotify("Success: " + title);
+            window.showNotify("CORE SAVED: " + title);
         };
 
-        // HOME LIST DISPLAY
+        // SYNC HOME LIST
         onSnapshot(query(animeCol, orderBy("updated", "desc")), (snap) => {
             const list = document.getElementById('myAnimeList');
             list.innerHTML = '';
             snap.forEach(d => {
                 const a = d.data();
                 const div = document.createElement('div');
-                div.className = 'glass p-3 rounded-xl flex gap-3 items-center relative border border-white/5';
+                div.className = 'glass p-3 rounded-xl flex gap-3 items-center relative';
                 div.innerHTML = `
-                    <img src="${a.image}" class="w-12 h-16 rounded object-cover shadow-lg">
+                    <img src="${a.image}" class="w-12 h-16 rounded object-cover">
                     <div class="flex-1">
-                        <h3 class="text-[10px] font-bold uppercase truncate w-32 text-cyan-50">${a.title}</h3>
+                        <h3 class="text-[10px] font-bold truncate w-32">${a.title}</h3>
                         <div class="flex items-center gap-4 mt-2">
                             <button onclick="up('${d.id}',${a.ep},-1)" class="w-7 h-7 glass rounded">-</button>
                             <span class="text-xs font-cyber">${a.ep}</span>
-                            <button onclick="up('${d.id}',${a.ep},1)" class="w-7 h-7 bg-cyan-500 text-black font-bold rounded shadow-lg shadow-cyan-500/20">+</button>
+                            <button onclick="up('${d.id}',${a.ep},1)" class="w-7 h-7 bg-cyan-500 text-black font-bold rounded">+</button>
                         </div>
                     </div>
                     <button onclick="del('${d.id}')" class="absolute top-2 right-2 text-gray-700">✕</button>`;
@@ -158,10 +183,10 @@
         window.up = (id, c, ch) => {
             if(c+ch < 0) return;
             updateDoc(doc(db, 'myAnime', id), { ep: c+ch, updated: Date.now() });
-            showNotify("EPISODE SYNCED");
+            window.showNotify("PROGRESS UPDATED");
         };
 
-        window.del = (id) => { if(confirm('Erase this core?')) deleteDoc(doc(db, 'myAnime', id)); };
+        window.del = (id) => { if(confirm('Erase core?')) deleteDoc(doc(db, 'myAnime', id)); };
     </script>
 </body>
-</html
+</html>
