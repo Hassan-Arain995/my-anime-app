@@ -11,16 +11,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root { --neon-blue: #00f3ff; --neon-purple: #9d00ff; }
-        body { background: #020205; color: white; font-family: 'Rajdhani', sans-serif; min-height: 100vh; overflow-x: hidden; }
+        body { background: #020205; color: white; font-family: 'Rajdhani', sans-serif; min-height: 100vh; overflow-x: hidden; padding-bottom: 100px; }
         .font-cyber { font-family: 'Orbitron', sans-serif; }
         .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
         .char-overlay { position: fixed; width: 300px; opacity: 0.15; z-index: -1; bottom: 0; right: -20px; pointer-events: none; }
-        .anime-card { background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+        .anime-card { background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
         .btn-neon { background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); color: black; font-weight: 900; }
         .nav-btn { opacity: 0.5; transition: 0.3s; }
         .nav-active { opacity: 1; color: var(--neon-blue); filter: drop-shadow(0 0 5px var(--neon-blue)); }
-        .tab-content { display: none; padding-bottom: 120px; }
+        .tab-content { display: none; }
         .active-tab { display: block; }
+        select { -webkit-appearance: none; appearance: none; }
     </style>
 </head>
 <body>
@@ -30,38 +31,44 @@
     <div id="home-tab" class="tab-content active-tab p-4 mx-auto max-w-xl">
         <header class="flex justify-between items-center mb-6">
             <h1 class="font-cyber text-xl text-cyan-400 italic">JUST ALYA</h1>
-            <select id="homeGenre" class="bg-black border border-cyan-500/30 rounded-lg text-[10px] p-2 uppercase" onchange="filterHome()">
-                <option value="all">Genres</option>
+            <select id="homeGenre" class="bg-black border border-cyan-500/30 rounded-lg text-[10px] p-2 uppercase outline-none" onchange="filterHome()">
+                <option value="all">ALL GENRES</option>
                 <option value="Action">Action</option>
-                <option value="Romance">Romance</option>
+                <option value="Adventure">Adventure</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Drama">Drama</option>
+                <option value="Fantasy">Fantasy</option>
                 <option value="Isekai">Isekai</option>
+                <option value="Romance">Romance</option>
+                <option value="Sci-Fi">Sci-Fi</option>
                 <option value="Supernatural">Supernatural</option>
+                <option value="Suspense">Suspense</option>
+                <option value="Slice of Life">Slice of Life</option>
             </select>
         </header>
-        <input id="homeSearch" type="text" placeholder="Search saved anime..." class="w-full glass p-4 rounded-2xl mb-6 outline-none" onkeyup="filterHome()">
+        <input id="homeSearch" type="text" placeholder="Search my cores..." class="w-full glass p-4 rounded-2xl mb-6 outline-none border-cyan-500/20" onkeyup="filterHome()">
         <div id="myAnimeList" class="space-y-4"></div>
     </div>
 
     <div id="discovery-tab" class="tab-content p-4 mx-auto max-w-xl">
-        <header class="flex justify-between items-center mb-4">
+        <header class="flex justify-between items-center mb-6">
             <h1 class="font-cyber text-lg text-purple-400">DISCOVERY</h1>
-            <select id="discGenre" class="bg-black border border-purple-500/30 rounded-lg text-[10px] p-2 uppercase" onchange="loadDiscovery()">
-                <option value="all">All Genres</option>
-                <option value="1">Action</option>
-                <option value="22">Romance</option>
-                <option value="37">Supernatural</option>
+            <select id="discGenre" class="bg-black border border-purple-500/30 rounded-lg text-[10px] p-2 uppercase outline-none" onchange="loadDiscovery()">
+                <option value="all">ALL CATEGORIES</option>
+                <option value="1">Action</option><option value="2">Adventure</option>
+                <option value="4">Comedy</option><option value="8">Drama</option>
+                <option value="10">Fantasy</option><option value="22">Romance</option>
+                <option value="24">Sci-Fi</option><option value="37">Supernatural</option>
+                <option value="41">Suspense</option><option value="36">Slice of Life</option>
+                <option value="62">Isekai</option><option value="27">Shounen</option>
+                <option value="42">Seinen</option>
             </select>
         </header>
-        
-        <div class="flex gap-4 mb-6 overflow-x-auto pb-2 whitespace-nowrap no-scrollbar">
-            <button onclick="changeSeason('upcoming')" class="px-4 py-2 glass rounded-full text-[10px] font-bold uppercase border-purple-500">Upcoming</button>
-            <button onclick="changeSeason('winter')" class="px-4 py-2 glass rounded-full text-[10px] font-bold uppercase">Winter 2026</button>
-            <button onclick="changeSeason('summer')" class="px-4 py-2 glass rounded-full text-[10px] font-bold uppercase">Summer 2026</button>
-        </div>
 
-        <div class="glass p-4 rounded-3xl mb-6">
-            <textarea id="massInput" placeholder="Paste 50+ names here..." class="w-full bg-black/40 p-3 rounded-xl text-xs h-20 mb-2 outline-none border border-white/5"></textarea>
-            <button onclick="massSync()" id="syncBtn" class="w-full btn-neon py-3 rounded-xl text-[10px] uppercase font-black">Mass Sync List</button>
+        <div class="flex gap-2 mb-6 overflow-x-auto pb-2 no-scrollbar">
+            <button onclick="changeSeason('upcoming')" class="px-5 py-2 glass rounded-full text-[10px] font-bold uppercase border-purple-500">Upcoming</button>
+            <button onclick="changeSeason('winter')" class="px-5 py-2 glass rounded-full text-[10px] font-bold uppercase">Winter 2026</button>
+            <button onclick="changeSeason('summer')" class="px-5 py-2 glass rounded-full text-[10px] font-bold uppercase">Summer 2026</button>
         </div>
 
         <div id="discoveryGrid" class="grid grid-cols-2 gap-4"></div>
@@ -72,7 +79,7 @@
             <span class="text-xl">🏠</span><span class="text-[8px] font-bold mt-1">HOME</span>
         </button>
         <button onclick="switchTab('discovery')" id="discovery-nav" class="nav-btn flex flex-col items-center">
-            <span class="text-xl">🛰️</span><span class="text-[8px] font-bold mt-1 uppercase">Discovery</span>
+            <span class="text-xl">🛰️</span><span class="text-[8px] font-bold mt-1">DISCOVERY</span>
         </button>
     </div>
 
@@ -106,12 +113,12 @@
         window.changeSeason = (s) => { currentSeason = s; loadDiscovery(); };
 
         window.filterHome = () => {
-            const search = document.getElementById('homeSearch').value.toLowerCase();
-            const genre = document.getElementById('homeGenre').value;
+            const s = document.getElementById('homeSearch').value.toLowerCase();
+            const g = document.getElementById('homeGenre').value;
             renderList(fullData.filter(a => {
-                const matchSearch = a.title.toLowerCase().includes(search);
-                const matchGenre = genre === 'all' || (a.genres && a.genres.includes(genre));
-                return matchSearch && matchGenre;
+                const mS = a.title.toLowerCase().includes(s);
+                const mG = g === 'all' || (a.genres && a.genres.includes(g));
+                return mS && mG;
             }));
         };
 
@@ -128,8 +135,8 @@
                 div.className = 'anime-card p-4 flex gap-4 items-center relative';
                 div.innerHTML = `<img src="${a.image}" class="w-14 h-20 rounded-xl object-cover">
                     <div class="flex-1">
-                        <h3 class="text-xs font-bold uppercase truncate w-36">${a.title}</h3>
-                        <p class="text-[8px] text-cyan-400 mt-1 uppercase">${a.date || 'TBA 2026'}</p>
+                        <h3 class="text-[11px] font-bold uppercase truncate w-36">${a.title}</h3>
+                        <p class="text-[7px] text-cyan-400 mt-1 uppercase tracking-tighter">${a.date || '2026'}</p>
                         <div class="flex items-center gap-4 mt-2">
                             <button onclick="up('${a.id}',${a.ep},-1)" class="w-8 h-8 glass rounded-lg">-</button>
                             <span class="text-lg font-cyber text-cyan-400">${a.ep}</span>
@@ -144,49 +151,34 @@
         window.loadDiscovery = async () => {
             const genre = document.getElementById('discGenre').value;
             let url = currentSeason === 'upcoming' ? 'https://api.jikan.moe/v4/seasons/upcoming' : `https://api.jikan.moe/v4/seasons/2026/${currentSeason}`;
-            if(genre !== 'all') url += `?genres=${genre}`;
-            
-            const res = await fetch(url);
+            const res = await fetch(url + (genre !== 'all' ? `?genres=${genre}` : ''));
             const json = await res.json();
             const grid = document.getElementById('discoveryGrid');
             grid.innerHTML = '';
             
             json.data.forEach(a => {
+                const title = a.title_english || a.title; // FORCING ENGLISH NAME
                 const div = document.createElement('div');
                 div.className = 'glass rounded-3xl overflow-hidden h-52 relative active:scale-95 transition';
-                div.onclick = () => addDoc(animeCol, { title: a.title, image: a.images.jpg.large_image_url, ep: 1, date: a.aired.string || '2026', genres: a.genres.map(g => g.name), updated: Date.now() });
+                div.onclick = () => addDoc(animeCol, { title: title, image: a.images.jpg.large_image_url, ep: 1, date: a.aired.string || '2026', genres: a.genres.map(g => g.name), updated: Date.now() });
                 div.innerHTML = `<img src="${a.images.jpg.large_image_url}" class="w-full h-full object-cover opacity-50">
                     <div class="absolute bottom-0 p-2 bg-black/90 w-full">
-                        <p class="text-[9px] font-bold truncate">${a.title}</p>
-                        <p class="text-[7px] text-cyan-400 uppercase">+ Track Core</p>
+                        <p class="text-[9px] font-bold truncate">${title}</p>
+                        <p class="text-[7px] text-cyan-400 uppercase tracking-widest">+ Track Core</p>
                     </div>`;
                 grid.appendChild(div);
             });
         };
 
-        window.massSync = async () => {
-            const val = document.getElementById('massInput').value;
-            const names = val.split(/[\n,]/);
-            const btn = document.getElementById('syncBtn');
-            btn.innerText = "ALYA SCANNING...";
-            for(let name of names) {
-                if(!name.trim()) continue;
-                try {
-                    const res = await fetch('https://api.jikan.moe/v4/anime?q=' + name.trim() + '&limit=1');
-                    const json = await res.json();
-                    if(json.data[0]) {
-                        const a = json.data[0];
-                        await addDoc(animeCol, { title: a.title, image: a.images.jpg.large_image_url, ep: 1, date: a.aired.string, genres: a.genres.map(g => g.name), updated: Date.now() });
-                    }
-                    await new Promise(r => setTimeout(r, 800));
-                } catch(e) {}
-            }
-            btn.innerText = "MASS SYNC LIST";
-            document.getElementById('massInput').value = '';
-        };
-
         window.up = (id, c, ch) => updateDoc(doc(db, 'myAnime', id), { ep: c+ch, updated: Date.now() });
         window.del = (id) => { if(confirm('Erase Core?')) deleteDoc(doc(db, 'myAnime', id)); };
+        
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
+        }
     </script>
 </body>
-</html>
+            </html>
+    
