@@ -4,82 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="icon" href="https://p16-capcut-va.ibyteimg.com/tos-alisg-v-643f8e/o0f7n8A7gIIE1mAnBAAezfUAn7eDWAEjfDCAIA~tplv-nh78p5uayg-1.webp">
+    <meta name="theme-color" content="#00f3ff">
     <title>Just Alya</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root { --neon-blue: #00f3ff; --neon-purple: #9d00ff; }
-        body { background: #020205; color: white; font-family: 'Rajdhani', sans-serif; min-height: 100vh; overflow-x: hidden; padding-bottom: 100px; }
+        body { background: #050505; color: white; font-family: 'Rajdhani', sans-serif; min-height: 100vh; padding-bottom: 120px; overflow-x: hidden; }
         .font-cyber { font-family: 'Orbitron', sans-serif; }
-        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
-        .char-overlay { position: fixed; width: 300px; opacity: 0.15; z-index: -1; bottom: 0; right: -20px; pointer-events: none; }
-        .anime-card { background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
-        .btn-neon { background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); color: black; font-weight: 900; }
+        .glass { background: rgba(20, 20, 30, 0.95); border: 1px solid rgba(255,255,255,0.1); }
+        
+        /* Background Alya (Subtle) */
+        .char-overlay { position: fixed; width: 60%; max-width: 300px; opacity: 0.1; z-index: -1; bottom: 0; right: -20px; pointer-events: none; }
+        
+        .active-season { background: var(--neon-blue) !important; color: black !important; border: none !important; box-shadow: 0 0 10px var(--neon-blue); }
         .nav-btn { opacity: 0.5; transition: 0.3s; }
         .nav-active { opacity: 1; color: var(--neon-blue); filter: drop-shadow(0 0 5px var(--neon-blue)); }
         .tab-content { display: none; }
         .active-tab { display: block; }
-        select { -webkit-appearance: none; appearance: none; }
+        select { background: #111; color: white; border: 1px solid #333; outline: none; }
     </style>
 </head>
 <body>
 
-    <img src="https://static.wikia.nocookie.net/shirayuki/images/c/c5/Alya_full_body.png" class="char-overlay">
+    <img src="https://static.wikia.nocookie.net/roshidere/images/3/3c/Alya_Anime_Design.png" 
+         class="char-overlay" 
+         onerror="this.style.display='none'">
 
     <div id="home-tab" class="tab-content active-tab p-4 mx-auto max-w-xl">
         <header class="flex justify-between items-center mb-6">
-            <h1 class="font-cyber text-xl text-cyan-400 italic">JUST ALYA</h1>
-            <select id="homeGenre" class="bg-black border border-cyan-500/30 rounded-lg text-[10px] p-2 uppercase outline-none" onchange="filterHome()">
-                <option value="all">ALL GENRES</option>
+            <h1 class="font-cyber text-xl text-cyan-400 italic tracking-widest">JUST ALYA</h1>
+            <select id="homeGenre" class="text-[10px] p-2 rounded uppercase" onchange="filterHome()">
+                <option value="all">MY GENRES</option>
                 <option value="Action">Action</option>
-                <option value="Adventure">Adventure</option>
-                <option value="Comedy">Comedy</option>
-                <option value="Drama">Drama</option>
-                <option value="Fantasy">Fantasy</option>
-                <option value="Isekai">Isekai</option>
                 <option value="Romance">Romance</option>
+                <option value="Isekai">Isekai</option>
+                <option value="Fantasy">Fantasy</option>
                 <option value="Sci-Fi">Sci-Fi</option>
-                <option value="Supernatural">Supernatural</option>
-                <option value="Suspense">Suspense</option>
                 <option value="Slice of Life">Slice of Life</option>
             </select>
         </header>
-        <input id="homeSearch" type="text" placeholder="Search my cores..." class="w-full glass p-4 rounded-2xl mb-6 outline-none border-cyan-500/20" onkeyup="filterHome()">
+
+        <input id="homeSearch" type="text" placeholder="Search my collection..." class="w-full glass p-4 rounded-xl mb-6 outline-none border-cyan-500/20 text-white" onkeyup="filterHome()">
+        
         <div id="myAnimeList" class="space-y-4"></div>
     </div>
 
     <div id="discovery-tab" class="tab-content p-4 mx-auto max-w-xl">
         <header class="flex justify-between items-center mb-6">
             <h1 class="font-cyber text-lg text-purple-400">DISCOVERY</h1>
-            <select id="discGenre" class="bg-black border border-purple-500/30 rounded-lg text-[10px] p-2 uppercase outline-none" onchange="loadDiscovery()">
-                <option value="all">ALL CATEGORIES</option>
-                <option value="1">Action</option><option value="2">Adventure</option>
-                <option value="4">Comedy</option><option value="8">Drama</option>
-                <option value="10">Fantasy</option><option value="22">Romance</option>
-                <option value="24">Sci-Fi</option><option value="37">Supernatural</option>
-                <option value="41">Suspense</option><option value="36">Slice of Life</option>
-                <option value="62">Isekai</option><option value="27">Shounen</option>
-                <option value="42">Seinen</option>
+            <select id="discGenre" class="text-[10px] p-2 rounded uppercase" onchange="loadDiscovery()">
+                <option value="all">ALL TYPES</option>
+                <option value="1">Action</option>
+                <option value="2">Adventure</option>
+                <option value="4">Comedy</option>
+                <option value="8">Drama</option>
+                <option value="10">Fantasy</option>
+                <option value="22">Romance</option>
+                <option value="24">Sci-Fi</option>
+                <option value="36">Slice of Life</option>
+                <option value="37">Supernatural</option>
+                <option value="62">Isekai</option>
             </select>
         </header>
 
-        <div class="flex gap-2 mb-6 overflow-x-auto pb-2 no-scrollbar">
-            <button onclick="changeSeason('upcoming')" class="px-5 py-2 glass rounded-full text-[10px] font-bold uppercase border-purple-500">Upcoming</button>
-            <button onclick="changeSeason('winter')" class="px-5 py-2 glass rounded-full text-[10px] font-bold uppercase">Winter 2026</button>
-            <button onclick="changeSeason('summer')" class="px-5 py-2 glass rounded-full text-[10px] font-bold uppercase">Summer 2026</button>
+        <div class="glass p-4 rounded-xl mb-6 border-purple-500/30">
+            <div class="flex gap-2 mb-2">
+                <input id="manualSearchInput" type="text" placeholder="Type specific anime name..." class="flex-1 bg-black/50 p-3 rounded text-xs outline-none border border-white/10">
+                <button onclick="manualSearch()" class="bg-purple-600 px-4 rounded font-bold text-xs uppercase">Find</button>
+            </div>
+            <textarea id="massInput" placeholder="Or paste a list of names here (Mass Sync)..." class="w-full bg-black/50 p-3 rounded text-xs h-16 outline-none border border-white/10 mb-2"></textarea>
+            <button onclick="massSync()" id="syncBtn" class="w-full py-2 bg-white/10 rounded text-[10px] font-bold uppercase hover:bg-white/20">Sync List</button>
         </div>
 
+        <div class="flex gap-3 mb-4 overflow-x-auto pb-2 no-scrollbar">
+            <button id="btn-upcoming" onclick="changeSeason('upcoming')" class="px-5 py-2 glass rounded-full text-[10px] font-bold uppercase border border-white/20 active-season whitespace-nowrap">Upcoming</button>
+            <button id="btn-winter" onclick="changeSeason('winter')" class="px-5 py-2 glass rounded-full text-[10px] font-bold uppercase border border-white/20 whitespace-nowrap">Winter 2026</button>
+            <button id="btn-summer" onclick="changeSeason('summer')" class="px-5 py-2 glass rounded-full text-[10px] font-bold uppercase border border-white/20 whitespace-nowrap">Summer 2026</button>
+        </div>
+
+        <div id="loadingIndicator" class="text-center text-xs text-cyan-400 mb-4 hidden">SCANNING DATABASE...</div>
         <div id="discoveryGrid" class="grid grid-cols-2 gap-4"></div>
     </div>
 
     <div class="fixed bottom-0 left-0 right-0 glass border-t border-cyan-500/30 flex justify-around p-4 z-50">
         <button onclick="switchTab('home')" id="home-nav" class="nav-btn nav-active flex flex-col items-center">
-            <span class="text-xl">🏠</span><span class="text-[8px] font-bold mt-1">HOME</span>
+            <span class="text-2xl">🏠</span><span class="text-[9px] font-bold mt-1">HOME</span>
         </button>
         <button onclick="switchTab('discovery')" id="discovery-nav" class="nav-btn flex flex-col items-center">
-            <span class="text-xl">🛰️</span><span class="text-[8px] font-bold mt-1">DISCOVERY</span>
+            <span class="text-2xl">🛰️</span><span class="text-[9px] font-bold mt-1">DISCOVERY</span>
         </button>
     </div>
 
@@ -95,10 +108,10 @@
             messagingSenderId: "412459430656",
             appId: "1:412459430656:web:2560368142cc5d109f2575"
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const animeCol = collection(db, "myAnime");
+        
         let fullData = [];
         let currentSeason = 'upcoming';
 
@@ -110,13 +123,18 @@
             if(tab === 'discovery') loadDiscovery();
         };
 
-        window.changeSeason = (s) => { currentSeason = s; loadDiscovery(); };
+        window.changeSeason = (s) => { 
+            currentSeason = s; 
+            document.querySelectorAll('button[id^="btn-"]').forEach(b => b.classList.remove('active-season'));
+            document.getElementById('btn-' + s).classList.add('active-season');
+            loadDiscovery(); 
+        };
 
         window.filterHome = () => {
             const s = document.getElementById('homeSearch').value.toLowerCase();
             const g = document.getElementById('homeGenre').value;
             renderList(fullData.filter(a => {
-                const mS = a.title.toLowerCase().includes(s);
+                const mS = (a.title || '').toLowerCase().includes(s);
                 const mG = g === 'all' || (a.genres && a.genres.includes(g));
                 return mS && mG;
             }));
@@ -132,53 +150,114 @@
             list.innerHTML = '';
             data.forEach(a => {
                 const div = document.createElement('div');
-                div.className = 'anime-card p-4 flex gap-4 items-center relative';
-                div.innerHTML = `<img src="${a.image}" class="w-14 h-20 rounded-xl object-cover">
+                div.className = 'glass p-3 rounded-xl flex gap-3 items-center relative';
+                div.innerHTML = `<img src="${a.image}" class="w-12 h-16 rounded object-cover">
                     <div class="flex-1">
-                        <h3 class="text-[11px] font-bold uppercase truncate w-36">${a.title}</h3>
-                        <p class="text-[7px] text-cyan-400 mt-1 uppercase tracking-tighter">${a.date || '2026'}</p>
-                        <div class="flex items-center gap-4 mt-2">
-                            <button onclick="up('${a.id}',${a.ep},-1)" class="w-8 h-8 glass rounded-lg">-</button>
-                            <span class="text-lg font-cyber text-cyan-400">${a.ep}</span>
-                            <button onclick="up('${a.id}',${a.ep},1)" class="w-8 h-8 btn-neon rounded-lg">+</button>
+                        <h3 class="text-[10px] font-bold uppercase truncate w-40">${a.title}</h3>
+                        <p class="text-[8px] text-cyan-400 mt-1">${a.date || 'TBA'}</p>
+                        <div class="flex items-center gap-3 mt-2">
+                            <button onclick="up('${a.id}',${a.ep},-1)" class="w-6 h-6 glass rounded flex items-center justify-center">-</button>
+                            <span class="text-sm font-cyber text-white w-4 text-center">${a.ep}</span>
+                            <button onclick="up('${a.id}',${a.ep},1)" class="w-6 h-6 bg-cyan-500 text-black font-bold rounded flex items-center justify-center">+</button>
                         </div>
                     </div>
-                    <button onclick="del('${a.id}')" class="absolute top-2 right-4 text-white/20">×</button>`;
+                    <button onclick="del('${a.id}')" class="absolute top-2 right-2 text-red-400 text-xs p-2">✕</button>`;
                 list.appendChild(div);
             });
         }
 
         window.loadDiscovery = async () => {
+            document.getElementById('loadingIndicator').classList.remove('hidden');
             const genre = document.getElementById('discGenre').value;
-            let url = currentSeason === 'upcoming' ? 'https://api.jikan.moe/v4/seasons/upcoming' : `https://api.jikan.moe/v4/seasons/2026/${currentSeason}`;
-            const res = await fetch(url + (genre !== 'all' ? `?genres=${genre}` : ''));
-            const json = await res.json();
-            const grid = document.getElementById('discoveryGrid');
-            grid.innerHTML = '';
+            let url = currentSeason === 'upcoming' 
+                ? 'https://api.jikan.moe/v4/seasons/upcoming' 
+                : `https://api.jikan.moe/v4/seasons/2026/${currentSeason}`;
             
-            json.data.forEach(a => {
-                const title = a.title_english || a.title; // FORCING ENGLISH NAME
-                const div = document.createElement('div');
-                div.className = 'glass rounded-3xl overflow-hidden h-52 relative active:scale-95 transition';
-                div.onclick = () => addDoc(animeCol, { title: title, image: a.images.jpg.large_image_url, ep: 1, date: a.aired.string || '2026', genres: a.genres.map(g => g.name), updated: Date.now() });
-                div.innerHTML = `<img src="${a.images.jpg.large_image_url}" class="w-full h-full object-cover opacity-50">
-                    <div class="absolute bottom-0 p-2 bg-black/90 w-full">
-                        <p class="text-[9px] font-bold truncate">${title}</p>
-                        <p class="text-[7px] text-cyan-400 uppercase tracking-widest">+ Track Core</p>
-                    </div>`;
-                grid.appendChild(div);
-            });
+            if(genre !== 'all') url += `?filter=tv&genres=${genre}`;
+            
+            try {
+                const res = await fetch(url);
+                const json = await res.json();
+                const grid = document.getElementById('discoveryGrid');
+                grid.innerHTML = '';
+                
+                if(!json.data || json.data.length === 0) {
+                    grid.innerHTML = '<div class="col-span-2 text-center text-xs text-gray-500 py-10">No Anime Found.</div>';
+                }
+
+                json.data.forEach(a => {
+                    const title = a.title_english ? a.title_english : a.title;
+                    const div = document.createElement('div');
+                    // REMOVED OPACITY FROM IMAGE
+                    div.className = 'glass rounded-xl overflow-hidden h-56 relative active:scale-95 transition cursor-pointer';
+                    div.onclick = () => {
+                        addDoc(animeCol, { 
+                            title: title, 
+                            image: a.images.jpg.large_image_url, 
+                            ep: 1, 
+                            date: a.aired.string ? a.aired.string.split(' to')[0] : '2026', 
+                            genres: a.genres.map(g => g.name), 
+                            updated: Date.now() 
+                        });
+                        alert('Added: ' + title);
+                    };
+                    div.innerHTML = `<img src="${a.images.jpg.large_image_url}" class="w-full h-full object-cover">
+                        <div class="absolute bottom-0 p-3 bg-gradient-to-t from-black via-black/80 to-transparent w-full">
+                            <p class="text-[10px] font-bold leading-tight line-clamp-2 text-white drop-shadow-md">${title}</p>
+                            <p class="text-[8px] text-green-400 mt-1 uppercase font-bold">+ ADD</p>
+                        </div>`;
+                    grid.appendChild(div);
+                });
+            } catch(e) {}
+            document.getElementById('loadingIndicator').classList.add('hidden');
+        };
+
+        window.manualSearch = async () => {
+            const q = document.getElementById('manualSearchInput').value;
+            if(!q) return;
+            const res = await fetch(`https://api.jikan.moe/v4/anime?q=${q}&limit=1`);
+            const json = await res.json();
+            if(json.data?.[0]) {
+                const a = json.data[0];
+                addDoc(animeCol, { 
+                    title: a.title_english || a.title, 
+                    image: a.images.jpg.large_image_url, 
+                    ep: 1, 
+                    date: a.aired?.string || 'Unknown', 
+                    genres: a.genres.map(g => g.name), 
+                    updated: Date.now() 
+                });
+                alert('Found & Added: ' + (a.title_english || a.title));
+            }
+        };
+
+        window.massSync = async () => {
+            const val = document.getElementById('massInput').value;
+            const names = val.split(/[\n,]/);
+            const btn = document.getElementById('syncBtn');
+            btn.innerText = "Processing...";
+            for(let name of names) {
+                if(!name.trim()) continue;
+                try {
+                    const res = await fetch('https://api.jikan.moe/v4/anime?q=' + name.trim() + '&limit=1');
+                    const json = await res.json();
+                    if(json.data[0]) {
+                        const a = json.data[0];
+                        await addDoc(animeCol, { title: a.title_english || a.title, image: a.images.jpg.large_image_url, ep: 1, date: a.aired.string, genres: a.genres.map(g => g.name), updated: Date.now() });
+                    }
+                    await new Promise(r => setTimeout(r, 800));
+                } catch(e) {}
+            }
+            btn.innerText = "Sync List";
+            document.getElementById('massInput').value = '';
         };
 
         window.up = (id, c, ch) => updateDoc(doc(db, 'myAnime', id), { ep: c+ch, updated: Date.now() });
-        window.del = (id) => { if(confirm('Erase Core?')) deleteDoc(doc(db, 'myAnime', id)); };
-        
+        window.del = (id) => { if(confirm('Delete this anime?')) deleteDoc(doc(db, 'myAnime', id)); };
+
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').catch(() => {});
-            });
+            navigator.serviceWorker.register('./sw.js').then(() => console.log('SW Registered'));
         }
     </script>
 </body>
-            </html>
-    
+</html>
